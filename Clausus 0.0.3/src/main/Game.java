@@ -2,16 +2,24 @@ package main;
 
 import java.applet.Applet;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.CodeSource;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import main.client.Client;
 import main.entities.Mob;
 import main.entities.Player;
 import main.gfx.ShadowRenderer;
@@ -23,6 +31,7 @@ import main.level.Building;
 import main.level.Level;
 import main.level.Sky;
 import main.level.Water;
+import main.server.Server;
 import main.status.GameInfo;
 import main.status.Messages;
 
@@ -56,7 +65,7 @@ public class Game extends Applet implements Runnable {
 	public static Point mouseS;
 	public static int sX = 0, sY = 0;
 	public static int centerX, centerY;
-	public static int winCenterX , winCenterY ;
+	public static int winCenterX, winCenterY;
 	public static ArrayList<Mob> mobs = new ArrayList<Mob>();
 	public static boolean gameStart = false;
 	public static Graphics g;
@@ -84,6 +93,13 @@ public class Game extends Applet implements Runnable {
 	public static GUI gui;
 	public static GUI lastGui;
 
+	public static Server server;
+	public static Thread serverThread;
+	public static Client client;
+	public static Thread clientThread;
+	public static boolean isServer = false;
+	public static boolean isClient = false;
+
 	// PRIVATE VARs
 	public static Image screen;
 	public static boolean vsync = true;
@@ -96,23 +112,22 @@ public class Game extends Applet implements Runnable {
 		game = new Game();
 
 		frame = new JFrame();
-		frame.setUndecorated(true);
+		// frame.setUndecorated(true);
 		frame.setTitle(TITLE + " " + VERSION + ": Build:" + BUILD);
 		frame.add(game);
 		frame.pack();
 		realSize = new Dimension(frame.getWidth(), frame.getHeight());
-		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		//frame.setResizable(true);
+		// frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		// frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
-		
-		pixel = new Dimension(frame.getWidth() / PIXEL_SIZE,
-				frame.getHeight() / PIXEL_SIZE);
+
+		pixel = new Dimension(frame.getWidth() / PIXEL_SIZE, frame.getHeight()
+				/ PIXEL_SIZE);
 		winCenterX = pixel.width / 2;
 		winCenterY = pixel.height / 2;
-		
+
 		game.start();
 	}
 
@@ -230,10 +245,14 @@ public class Game extends Applet implements Runnable {
 				lastTimer += 1000;
 				Game.frames = frames;
 				Game.ticks = ticks;
+
+
+
 				frames = 0;
 				ticks = 0;
 
 				setUpdatesPerTick();
+
 				Game.updatesPerTick = 0;
 			}
 
@@ -273,10 +292,10 @@ public class Game extends Applet implements Runnable {
 			centerY = (int) player.y - sY;
 		}
 
-//		if (frame.getWidth() != realSize.width
-//				|| frame.getHeight() != realSize.height) {
-//			frame.pack();
-//		}
+		// if (frame.getWidth() != realSize.width
+		// || frame.getHeight() != realSize.height) {
+		// frame.pack();
+		// }
 
 		mouseS = new Point(mouse.x - sX, mouse.y - sY);
 
@@ -333,7 +352,7 @@ public class Game extends Applet implements Runnable {
 
 	public static void switchGui(GUI guiNew) {
 		Game.gui.setActive(false);
-		boolean temp = false;
+		
 
 		if (lastGui == null) {
 			Game.lastGui = Game.gui;
@@ -347,4 +366,21 @@ public class Game extends Applet implements Runnable {
 		System.out.println("GUI: " + guiNew.getType().name());
 	}
 
+	public static String intArrayToString(int[] a) {
+		String out = "{";
+		int counter = 0;
+		for (int i : a) {
+			counter++;
+			out += String.valueOf(i);
+			if(counter <= a.length-1){
+				out += ",";
+			}
+		}
+		out += "} ";
+		return out;
+	}
+
+	public static String intToSting(int a){
+		return intArrayToString(new int[]{a});
+	}
 }

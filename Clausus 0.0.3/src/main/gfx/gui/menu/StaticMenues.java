@@ -25,6 +25,8 @@ public class StaticMenues {
 		Font font = new Font("Franklin Gothic Demi", Font.BOLD, 40 / Game.PIXEL_SIZE);
 
 		elements.add(new GUI_Element("Start", font, textColor, Action.gameStart));
+		elements.add(new GUI_Element("Start as Server", font, textColor, Action.gameStartServer));
+		elements.add(new GUI_Element("Connect...", font, textColor, Action.gameStartConnect));
 		elements.add(new GUI_Element("Options", font, textColor,
 				Action.gameOptions));
 		elements.add(new GUI_Element("Exit", font, textColor, Action.gameExit));

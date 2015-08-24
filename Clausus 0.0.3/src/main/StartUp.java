@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.client.Client;
 import main.entities.Mob;
 import main.entities.Player;
 import main.entities.Swortsman;
@@ -57,7 +58,12 @@ public class StartUp implements Runnable {
 			Game.messages.setCustomText("Loading...Welt wird erstellt");
 			Game.level = new Level();
 			Game.level.init();
-			Game.level.wg = new WorldGeneration();
+			
+//			if(!Game.isClient){
+				Game.level.wg = new WorldGeneration();
+//			}else{
+//				Game.client.getLevel();
+//			}
 			// BlockPhysic-Klasse erstellen
 			Game.blockphysic = new BlockPhysic(Game.level);
 			// Wasser-Klasse erstellen

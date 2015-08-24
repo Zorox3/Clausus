@@ -3,11 +3,13 @@ package main.gfx.gui;
 import java.awt.event.WindowEvent;
 
 import main.Game;
+import main.client.Client;
 import main.gfx.gui.menu.StaticMenues;
+import main.server.Server;
 
 public enum Action {
 
-	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack;
+	NONE, gameStart, gameStartServer, gameStartConnect, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack;
 
 	public static void manageActions(Action a) {
 
@@ -39,6 +41,22 @@ public enum Action {
 		case toggelVsync:
 			Game.vSync(Game.vsync ? false : true);
 			Game.switchGui(StaticMenues.gameOptions());
+		case gameStartConnect:
+			Game.client = new Client(2222);
+			Game.isClient = true;
+			Game.clientThread = new Thread(Game.client, "Client Thread");
+			Game.clientThread.start();
+			
+			Action.manageActions(Action.gameStart);
+			break;
+		case gameStartServer:
+			Game.server = new Server(2222);
+			Game.isServer = true;
+			Game.serverThread = new Thread(Game.server, "Server Thread");
+			Game.serverThread.start();
+			
+			Action.manageActions(Action.gameStart);
+			break;
 		default:
 
 		}
