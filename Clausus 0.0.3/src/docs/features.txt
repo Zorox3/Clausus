@@ -1,0 +1,35 @@
+--------------------------------
+
+FEATURES
+
+- Movement
+- World Generation
+- Water
+- Block Placement/Braking
+- Inventory
+- Game Informations (Framerate/Chunks/Updates/Coordinates etc)
+- Biome
+
+
+----------------------------------
+
+TODO
+
+- Overall Performance
+- Mobs / AI
+- More Blocks
+- Block Physik (Sand/Gravel)
+- Better Water (Flow over a Chunkborder)
+- Better Rendering
+- Light / Darkspots
+- Commands
+- Debug Console
+- (Multiplayer)
+	- Server
+	
+-----------------------------------
+
+BUGS
+
+- (Waterflow) 
+- Index out of Bounds on Chunk generation (or random)
