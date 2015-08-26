@@ -73,7 +73,7 @@ public class StaticMenues {
 
 		elements.add(new GUI_Element("VSync: " + (Game.vsync ? "On" : "Off"),
 				font, textColor, Action.toggelVsync));
-		elements.add(new GUI_Element("Option 2", font, textColor, Action.NONE));
+		elements.add(new GUI_Element("Shadow: " + (Game.showShadow ? "On" : "Off"), font, textColor, Action.showShadow));
 		elements.add(new GUI_Element("Option 3", font, textColor, Action.NONE));
 		elements.add(new GUI_Element("<- Back", font, textColor, Action.guiBack));
 

@@ -42,6 +42,7 @@ public class Level implements Runnable {
 	private Random randomBiom = new Random();
 
 	private List<Biom> bioms = new ArrayList<>();
+	public List<int[]> noShadowList = new ArrayList<>();
 
 	public Biom biom;
 	private Biom tempBiom;
@@ -55,6 +56,13 @@ public class Level implements Runnable {
 		bioms.add(new Desert());
 		bioms.add(new GrasHills());
 		bioms.add(new Swamp());
+		
+		
+		noShadowList.add(Tile.air);
+		noShadowList.add(Tile.wood);
+		noShadowList.add(Tile.leaves);
+		noShadowList.add(Tile.water);
+		noShadowList.add(Tile.water_half);
 
 	}
 
@@ -157,7 +165,7 @@ public class Level implements Runnable {
 							if (chunk.get(i)[x][y].id != Tile.air) {
 								double c = 0;
 								if(y-4 >= 0){
-									if(chunk.get(i)[x][y-4].id != Tile.air){
+									if(!noShadowList.contains(chunk.get(i)[x][y-4].id)){
 										double nx =  (chunk.get(i)[x][y].x - Game.player.x);
 										double ny = (chunk.get(i)[x][y].y - Game.player.y);
 										c =  Math.sqrt((nx * nx) + (ny * ny)) / Tile.TILE_SIZE; 

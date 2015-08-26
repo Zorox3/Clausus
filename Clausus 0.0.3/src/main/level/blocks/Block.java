@@ -21,7 +21,7 @@ public class Block extends Rectangle {
 		if (id != Tile.air) {
 			if(c < 25 || !Game.showShadow)
 				g.drawImage(Tile.texture.get(id), x - Game.sX, y - Game.sY, null);
-			if (Game.showShadow)
+			if (Game.showShadow && !Game.level.noShadowList.contains(id))
 				renderShadow(g, c);
 		}
 

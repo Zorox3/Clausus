@@ -7,7 +7,7 @@ import main.gfx.gui.menu.StaticMenues;
 
 public enum Action {
 
-	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack;
+	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow;
 
 	public static void manageActions(Action a) {
 
@@ -39,6 +39,11 @@ public enum Action {
 		case toggelVsync:
 			Game.vSync(Game.vsync ? false : true);
 			Game.switchGui(StaticMenues.gameOptions());
+			break; 
+		case showShadow:
+			Game.showShadow = Game.showShadow ? false : true;
+			Game.switchGui(StaticMenues.gameOptions());
+			break;
 		default:
 
 		}

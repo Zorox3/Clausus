@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import main.Game;
@@ -34,9 +35,10 @@ public class GameInfo {
 		info.add("Updates pro Tick: " + Game.totalUpdatesPerTick);
 
 		info.add("VSync: " + (Game.vsync ? "On" : "Off"));
-		
-		info.add("Shadow: " + (Game.showShadow ? "On" : "Off") + " | Darkness: " + Game.sky.getDarkness());
-		
+
+		info.add("Shadow: " + (Game.showShadow ? "On" : "Off")
+				+ " | Darkness: " + Game.sky.getDarkness());
+
 		info.add("Time: " + Game.sky.dayFrame + " / " + Game.sky.dayTime);
 
 		String db = "";
@@ -63,7 +65,7 @@ public class GameInfo {
 	public void render(Graphics g) {
 
 		int c = 0;
-		Color color;
+		Color color = Color.BLACK;
 		for (String s : info) {
 
 			if (c == info.size() - 1) {
@@ -72,8 +74,9 @@ public class GameInfo {
 				color = normalColor;
 			}
 
-			g.setFont(new Font("Franklin Gothic Demi", Font.BOLD, 20 / Game.PIXEL_SIZE));
-			
+			g.setFont(new Font("Franklin Gothic Demi", Font.BOLD,
+					20 / Game.PIXEL_SIZE));
+
 			TextRenderer.writeText(g, s, color, Game.centerX
 					- (Game.size.width / Game.PIXEL_SIZE) / 2 + 20,
 					Game.centerY - (Game.size.height / Game.PIXEL_SIZE) / 2
@@ -81,5 +84,23 @@ public class GameInfo {
 
 			c++;
 		}
+		int nx = 20;
+		g.setColor(new Color(0,0,0,100));
+		g.fillRect(0, Game.pixel.height - 100, 100, 100);
+		
+		
+		for (int f : Game.lastFrames) {
+			
+			if(f*2 > 60){
+				color = new Color(0, f*2, 0);
+			}else if(f*2 < 60){
+				color = new Color(f*2, f*2, 0);
+			}
+			nx += 5;
+			
+			g.setColor(color);
+			g.fillRect(nx, Game.pixel.height-f*2, 4, f*2);
+		}
+
 	}
 }

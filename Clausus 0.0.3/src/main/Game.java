@@ -56,7 +56,7 @@ public class Game extends Applet implements Runnable {
 	public static Point mouseS;
 	public static int sX = 0, sY = 0;
 	public static int centerX, centerY;
-	public static int winCenterX , winCenterY ;
+	public static int winCenterX, winCenterY;
 	public static ArrayList<Mob> mobs = new ArrayList<Mob>();
 	public static boolean gameStart = false;
 	public static Graphics g;
@@ -66,6 +66,7 @@ public class Game extends Applet implements Runnable {
 	// PUBLIC VARs
 	public static int ticks;
 	public static int frames;
+	public static int[] lastFrames = new int[20];
 	public static Building building;
 	public static Water water;
 	public static ShadowRenderer shadow;
@@ -97,22 +98,21 @@ public class Game extends Applet implements Runnable {
 
 		frame = new JFrame();
 		frame.setUndecorated(true);
-		frame.setTitle(TITLE + " " + VERSION + ": Build:" + BUILD);
+		frame.setTitle(TITLE + " " + VERSION + ": Build: " + BUILD);
 		frame.add(game);
 		frame.pack();
 		realSize = new Dimension(frame.getWidth(), frame.getHeight());
-		//frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		//frame.setResizable(true);
+		// frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		// frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
-		
-		pixel = new Dimension(frame.getWidth() / PIXEL_SIZE,
-				frame.getHeight() / PIXEL_SIZE);
+
+		pixel = new Dimension(frame.getWidth() / PIXEL_SIZE, frame.getHeight()
+				/ PIXEL_SIZE);
 		winCenterX = pixel.width / 2;
 		winCenterY = pixel.height / 2;
-		
+
 		game.start();
 	}
 
@@ -197,6 +197,7 @@ public class Game extends Applet implements Runnable {
 
 		int ticks = 0;
 		int frames = 0;
+		int i = 0;
 
 		this.init();
 
@@ -206,8 +207,7 @@ public class Game extends Applet implements Runnable {
 			deltaRender += (now - lastTime) / nsPerTickRender;
 			lastTime = now;
 
-			// Frame limit;
-
+			
 			boolean shouldRender = !vsync;
 
 			if (delta >= 1) {
@@ -230,6 +230,14 @@ public class Game extends Applet implements Runnable {
 				lastTimer += 1000;
 				Game.frames = frames;
 				Game.ticks = ticks;
+
+				lastFrames[i++] = frames;
+
+				if(i > lastFrames.length-1){
+					i = 0;
+				}
+				
+				
 				frames = 0;
 				ticks = 0;
 
@@ -273,10 +281,10 @@ public class Game extends Applet implements Runnable {
 			centerY = (int) player.y - sY;
 		}
 
-//		if (frame.getWidth() != realSize.width
-//				|| frame.getHeight() != realSize.height) {
-//			frame.pack();
-//		}
+		// if (frame.getWidth() != realSize.width
+		// || frame.getHeight() != realSize.height) {
+		// frame.pack();
+		// }
 
 		mouseS = new Point(mouse.x - sX, mouse.y - sY);
 
