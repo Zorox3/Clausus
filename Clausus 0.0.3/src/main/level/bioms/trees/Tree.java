@@ -1,7 +1,5 @@
 package main.level.bioms.trees;
 
-import java.util.Random;
-
 import main.Game;
 import main.level.blocks.Block;
 import main.level.blocks.Tile;
@@ -56,7 +54,7 @@ public class Tree {
 	}
 
 	private void placeLeaves(int width, int top) {
-		int r = new Random().nextInt(2) - new Random().nextInt(2);
+		int r = Game.globalRandom.nextInt(2) - Game.globalRandom.nextInt(2);
 		for (int xl = this.x - width + 1; xl < this.x + width; xl++) {
 			if (xl < block.length && xl > 0) {
 				if (top == this.top - 1 && xl == this.x + r) {

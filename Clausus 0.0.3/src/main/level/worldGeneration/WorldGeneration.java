@@ -1,7 +1,5 @@
 package main.level.worldGeneration;
 
-import java.util.Random;
-
 import main.Game;
 import main.level.bioms.Biom;
 import main.level.bioms.trees.Tree;
@@ -9,7 +7,7 @@ import main.level.blocks.Block;
 import main.level.blocks.Tile;
 
 public class WorldGeneration {
-
+	
 	private int lHeight = Game.level.lHeight;
 	private int lWidth = Game.level.lWidth;
 
@@ -17,10 +15,10 @@ public class WorldGeneration {
 	private double STEP_CHANGE;
 	private int HEIGHT_MAX;
 	private int HEIGHT_MIN;
-	private double slope = (Math.random() * STEP_MAX) * 2 - STEP_MAX;
-	private double height = Math.random() * HEIGHT_MAX;
+	private double slope = (Game.globalRandom.nextDouble() * STEP_MAX) * 2 - STEP_MAX;
+	private double height = Game.globalRandom.nextDouble() * HEIGHT_MAX;
 
-	private Random r = new Random();
+	
 
 	public Block[][] generateLevel(Block[][] block, Biom biom) {
 
@@ -44,12 +42,12 @@ public class WorldGeneration {
 
 				// Stone GROUND
 				if (y > heightMap[x]
-						+ (biom.sMainMaterialHeight + new Random()
+						+ (biom.sMainMaterialHeight + Game.globalRandom
 								.nextInt(biom.sMainMeterialHeightRandom))) {
 					block[x][y].id = biom.mainMaterial;
 				}
 
-				if (y > heightMap[x] + 2 + new Random().nextInt(2)) {
+				if (y > heightMap[x] + 2 + Game.globalRandom.nextInt(2)) {
 					if (perlinnoise[x][y] >= 4f && perlinnoise[x][y] <= 8f) {
 						block[x][y].id = biom.mainMaterial;
 					} else if (perlinnoise[x][y] >= 0f
@@ -59,7 +57,7 @@ public class WorldGeneration {
 							&& perlinnoise[x][y] <= 10f) {
 						block[x][y].id = biom.sOverlayMaterial;
 					} else {
-						int randomOre = r.nextInt(100);
+						int randomOre = Game.globalRandom.nextInt(100);
 
 						// KOHLE
 						if (randomOre >= biom.fCoal && randomOre <= biom.tCoal) {
@@ -102,7 +100,7 @@ public class WorldGeneration {
 
 						// FILLER
 						else {
-							int[] defaultTile = new Random().nextInt(100) <= biom.randomChance ? biom.filler1
+							int[] defaultTile = Game.globalRandom.nextInt(100) <= biom.randomChance ? biom.filler1
 									: biom.filler2;
 							placeBlockCross(block, x, y, defaultTile);
 						}
@@ -113,7 +111,7 @@ public class WorldGeneration {
 				if (y > 1)
 					if (block[x][y].id != Tile.air
 							&& block[x][y - 1].id == Tile.air) {
-						if (new Random().nextInt(100) < biom.overlayDif) {
+						if (Game.globalRandom.nextInt(100) < biom.overlayDif) {
 							block[x][y].id = biom.sOverlayMaterial;
 						} else {
 							block[x][y].id = biom.overlayMaterial;
@@ -128,8 +126,8 @@ public class WorldGeneration {
 
 		
 
-		for (int i = 0; i < r.nextInt(biom.treeCount); i++) {
-			t.placeTree(r.nextInt(biom.maxTreeWidth)+1, r.nextInt(biom.maxTreeHeight)+1, r.nextInt(Game.level.lWidth), Tile.wood,
+		for (int i = 0; i < Game.globalRandom.nextInt(biom.treeCount); i++) {
+			t.placeTree(Game.globalRandom.nextInt(biom.maxTreeWidth)+1, Game.globalRandom.nextInt(biom.maxTreeHeight)+1, Game.globalRandom.nextInt(Game.level.lWidth), Tile.wood,
 					Tile.leaves);
 		}
 		block = t.returnBlock();
@@ -143,7 +141,7 @@ public class WorldGeneration {
 
 		for (int x = 0; x < lWidth; x++) {
 			height += slope;
-			slope += (Math.random() * STEP_CHANGE) * 2 - STEP_CHANGE;
+			slope += (Game.globalRandom.nextDouble() * STEP_CHANGE) * 2 - STEP_CHANGE;
 
 			if (slope > STEP_MAX) {
 				slope = STEP_MAX;
@@ -186,12 +184,12 @@ public class WorldGeneration {
 	}
 
 	private float[][] GenerateWhiteNoise(int width, int height) {
-		Random random = new Random(2); // Seed to 0 for testing
+		 // Seed to 0 for testing
 		float[][] noise = new float[width][height];
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				noise[i][j] = (float) random.nextDouble() % 1;
+				noise[i][j] = (float) Game.globalRandom.nextDouble() % 1;
 			}
 		}
 

@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.io.File;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -85,6 +86,9 @@ public class Game extends Applet implements Runnable {
 	public static GUI gui;
 	public static GUI lastGui;
 
+	
+	public static Random globalRandom = new Random(getSeed());
+	
 	// PRIVATE VARs
 	public static Image screen;
 	public static boolean vsync = true;
@@ -353,6 +357,10 @@ public class Game extends Applet implements Runnable {
 		Game.gui.setActive(true);
 
 		System.out.println("GUI: " + guiNew.getType().name());
+	}
+
+	public static long getSeed() {
+		return Level.levelSeed;
 	}
 
 }

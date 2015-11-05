@@ -39,11 +39,12 @@ public class Level implements Runnable {
 	public WorldGeneration wg;
 	public int maxChunks = 1000;
 
-	private Random randomBiom = new Random();
-
 	private List<Biom> bioms = new ArrayList<>();
 	public List<int[]> noShadowList = new ArrayList<>();
 
+	public static BufferedImage shadowMap;
+	public static final long levelSeed = new Random().nextLong();
+	
 	public Biom biom;
 	private Biom tempBiom;
 	private int biomTimes = 0;
@@ -82,12 +83,12 @@ public class Level implements Runnable {
 
 		if (biomTimes <= 0) {
 
-			biom = bioms.get(randomBiom.nextInt(bioms.size()));
+			biom = bioms.get(Game.globalRandom.nextInt(bioms.size()));
 
 			Game.water.waterTexture = Tile.water;
 			Game.water.waterTexture_half = Tile.water_half;
 
-			biomTimes = randomBiom.nextInt(biom.toWidth - biom.fromWidth)
+			biomTimes = Game.globalRandom.nextInt(biom.toWidth - biom.fromWidth)
 					+ biom.fromWidth;
 
 			setBorderBiom(biom);
@@ -141,7 +142,7 @@ public class Level implements Runnable {
 		}
 	}
 
-	public static BufferedImage shadowMap;
+
 
 	public void render(Graphics g) {
 		int counterX = 0;
