@@ -26,6 +26,8 @@ public class Client implements Runnable {
 			socket = new Socket("localhost", this._port);
 			System.out.println("Erwarte Daten");
 
+			Game.startGame();
+			
 			while (Game.isClient) {
 				
 				if (socket != null) {

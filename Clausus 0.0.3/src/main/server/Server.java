@@ -82,7 +82,7 @@ public class Server implements Runnable {
 	public void run() {
 		try {
 			socket = server.accept();
-			//socket.setTcpNoDelay(true);
+			socket.setTcpNoDelay(true);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

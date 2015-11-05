@@ -47,7 +47,9 @@ public enum Action {
 			Game.clientThread = new Thread(Game.client, "Client Thread");
 			Game.clientThread.start();
 			
-			Action.manageActions(Action.gameStart);
+			Game.gui.setActive(false);
+
+			//Action.manageActions(Action.gameStart);
 			break;
 		case gameStartServer:
 			Game.server = new Server(2222);
