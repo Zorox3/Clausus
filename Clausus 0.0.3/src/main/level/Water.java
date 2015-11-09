@@ -110,6 +110,11 @@ public class Water {
 						
 						//DOWN MOVEMENT
 						boolean movedDown = false;
+						
+						if(y + 1 >= lHeight){
+							continue;
+						}
+						
 						if (level.chunk.get(i)[x][y + 1].id == Tile.air
 								|| level.chunk.get(i)[x][y + 1].id == waterTexture_half) {
 							level.chunk.get(i)[x][y].id = Tile.air;

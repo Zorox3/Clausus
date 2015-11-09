@@ -56,6 +56,11 @@ public class GameInfo {
 
 		info.add("Debug Rendering: " + db);
 
+		
+		info.add("Seed: " + Game.getSeed());
+		
+		
+		
 		if (Game.lastError != "")
 			info.add("Last Error: " + Game.lastError);
 		else
@@ -86,7 +91,7 @@ public class GameInfo {
 		}
 		int nx = 20;
 		g.setColor(new Color(0,0,0,100));
-		g.fillRect(0, Game.pixel.height - 100, 100, 100);
+		g.fillRect(0, Game.pixel.height - 100, 150, 100);
 		
 		
 		for (int f : Game.lastFrames) {

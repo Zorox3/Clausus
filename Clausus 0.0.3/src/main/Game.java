@@ -33,7 +33,7 @@ public class Game extends Applet implements Runnable {
 
 	// PRIVATE STATIC FINALS VARs
 	private static final String TITLE = "Clausus";
-	private static final String VERSION = "0.0.3";
+	private static final String VERSION = "0.0.4";
 	private static final String BUILD = "4eff317";
 	public static final int PIXEL_SIZE = 1;
 
@@ -96,6 +96,8 @@ public class Game extends Applet implements Runnable {
 	public static int debugRendering = 0;
 
 	public static Game game;
+
+	public static boolean shadowDebug = false;
 
 	public static void main(String args[]) {
 		game = new Game();

@@ -53,6 +53,7 @@ public class Block extends Rectangle {
 		}
 	}
 
+	
 	public void debugRenderer(Graphics g, double c) {
 		if (id != Tile.air) {
 			g.drawImage(Tile.textureSmall.get(id), x - Game.sX + 5, y - Game.sY

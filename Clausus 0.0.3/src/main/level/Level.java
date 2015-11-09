@@ -43,8 +43,10 @@ public class Level implements Runnable {
 	public List<int[]> noShadowList = new ArrayList<>();
 
 	public static BufferedImage shadowMap;
-	public static final long levelSeed = new Random().nextLong();
+	private static long tempSeed = new Random().nextLong();
 	
+	public static final long levelSeed = tempSeed < 0 ? tempSeed * -1 : tempSeed;
+
 	public Biom biom;
 	private Biom tempBiom;
 	private int biomTimes = 0;
@@ -57,8 +59,7 @@ public class Level implements Runnable {
 		bioms.add(new Desert());
 		bioms.add(new GrasHills());
 		bioms.add(new Swamp());
-		
-		
+
 		noShadowList.add(Tile.air);
 		noShadowList.add(Tile.wood);
 		noShadowList.add(Tile.leaves);
@@ -88,8 +89,8 @@ public class Level implements Runnable {
 			Game.water.waterTexture = Tile.water;
 			Game.water.waterTexture_half = Tile.water_half;
 
-			biomTimes = Game.globalRandom.nextInt(biom.toWidth - biom.fromWidth)
-					+ biom.fromWidth;
+			biomTimes = Game.globalRandom
+					.nextInt(biom.toWidth - biom.fromWidth) + biom.fromWidth;
 
 			setBorderBiom(biom);
 		}
@@ -142,13 +143,11 @@ public class Level implements Runnable {
 		}
 	}
 
-
-
 	public void render(Graphics g) {
 		int counterX = 0;
 		int counterY = 0;
-		//ShadowRenderer.updateShadow();
-		//Graphics2D image = (Graphics2D) shadowMap.getGraphics();
+		// ShadowRenderer.updateShadow();
+		// Graphics2D image = (Graphics2D) shadowMap.getGraphics();
 		try {
 			for (int i = Game.player.playerChunk == 0 ? 0
 					: Game.player.playerChunk - 1; i < (Game.player.playerChunk == 0 ? 0
@@ -165,16 +164,18 @@ public class Level implements Runnable {
 
 							if (chunk.get(i)[x][y].id != Tile.air) {
 								double c = 0;
-								if(y-4 >= 0){
-									if(!noShadowList.contains(chunk.get(i)[x][y-4].id)){
-										double nx =  (chunk.get(i)[x][y].x - Game.player.x);
+								if (y - 4 >= 0) {
+									if (!noShadowList
+											.contains(chunk.get(i)[x][y - 4].id)) {
+										double nx = (chunk.get(i)[x][y].x - Game.player.x);
 										double ny = (chunk.get(i)[x][y].y - Game.player.y);
-										c =  Math.sqrt((nx * nx) + (ny * ny)) / Tile.TILE_SIZE; 
+										c = Math.sqrt((nx * nx) + (ny * ny))
+												/ Tile.TILE_SIZE;
+
 									}
 								}
-								
 								if (Game.gameinfo && Game.debugRendering == 1) {
-									
+
 									chunk.get(i)[x][y].debugRenderer(g, c);
 
 								} else {

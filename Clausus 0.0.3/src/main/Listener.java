@@ -50,8 +50,9 @@ public class Listener implements KeyListener, MouseListener,
 			if (Game.debugRendering > 2)
 				Game.debugRendering = 0;
 			break;
-		case KeyEvent.VK_F5:
 			
+		case KeyEvent.VK_F5:
+			Game.shadowDebug = Game.shadowDebug ? false : true;
 			break;
 		case KeyEvent.VK_UP:
 			Game.gui.selected --;
