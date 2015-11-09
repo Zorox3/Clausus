@@ -15,6 +15,7 @@ public class Player extends DoubleRectangle {
 	public int jumpingHeight = 24, jumpingCount = 0;
 
 	public boolean isJumping = false;
+	public boolean inWater = false;
 
 	public int positionX;
 	public int positionY;

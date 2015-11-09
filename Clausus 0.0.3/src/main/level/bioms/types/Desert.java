@@ -16,7 +16,7 @@ public class Desert extends Biom{
 		this.STEP_MAX = 0.6;
 		this.STEP_CHANGE = 0.2;
 		this.HEIGHT_MAX = lHeight - 25;
-		this.HEIGHT_MIN = 30;
+		this.HEIGHT_MIN = 60;
 		
 		
 		//this.mainMaterial = Tile.sand;

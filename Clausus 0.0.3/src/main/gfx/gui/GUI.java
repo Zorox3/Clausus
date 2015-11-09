@@ -33,6 +33,15 @@ public class GUI {
 		this.y = y;
 		this.type = type;
 	}
+	public GUI(GUI_Type type, Color bgColor, List<GUI_Element> elements, int x,
+			int y, int selected) {
+		this.bgColor = bgColor;
+		this.elements = elements;
+		this.x = x;
+		this.y = y;
+		this.type = type;
+		this.selected = selected;
+	}
 
 	public GUI_Type getType() {
 		return type;

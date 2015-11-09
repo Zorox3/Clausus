@@ -85,17 +85,18 @@ public class WorldGeneration {
 
 						}
 
-						// DIAMANT
-						else if (randomOre >= biom.fDia
-								&& randomOre <= biom.tDia && y > biom.hDia) {
-							placeBlockCross(block, x, y, Tile.diamond);
-
-						}
 
 						// KIES
 						else if (randomOre >= biom.fGravel
 								&& randomOre <= biom.tGravel) {
 							placeBlockCross(block, x, y, Tile.gravel);
+						}
+
+						// DIAMANT
+						else if (randomOre >= biom.fDia
+								&& randomOre <= biom.tDia && y > biom.hDia) {
+							placeBlockCross(block, x, y, Tile.diamond);
+
 						}
 
 						// FILLER
@@ -117,7 +118,7 @@ public class WorldGeneration {
 							block[x][y].id = biom.overlayMaterial;
 						}
 					}
-				if (y > 45 && block[x][y].id == Tile.air)
+				if (y > lHeight-38 && block[x][y].id == Tile.air)
 					block[x][y].id = biom.water;
 			}
 		}

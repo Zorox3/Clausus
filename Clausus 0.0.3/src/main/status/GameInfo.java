@@ -10,6 +10,7 @@ import java.util.List;
 import main.Game;
 import main.gfx.TextRenderer;
 import main.level.Level;
+import main.level.Sky;
 import main.level.blocks.Tile;
 
 public class GameInfo {
@@ -37,7 +38,7 @@ public class GameInfo {
 		info.add("VSync: " + (Game.vsync ? "On" : "Off"));
 
 		info.add("Shadow: " + (Game.showShadow ? "On" : "Off")
-				+ " | Darkness: " + Game.sky.getDarkness());
+				+ " | Darkness: " + Game.sky.getDarkness() + " (" + Game.sky.getDayTimeName() + ")");
 
 		info.add("Time: " + Game.sky.dayFrame + " / " + Game.sky.dayTime);
 

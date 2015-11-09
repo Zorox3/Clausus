@@ -15,7 +15,7 @@ public abstract class Biom {
 	public double STEP_MAX = 1.5;
 	public double STEP_CHANGE = 1.0;
 	public int HEIGHT_MAX = lHeight - 15;
-	public int HEIGHT_MIN = 30;
+	public int HEIGHT_MIN = 50;
 
 	public Biom borderBiom = null;
 	public int borderBiomTime = 2;
@@ -58,7 +58,7 @@ public abstract class Biom {
 	//DIAMANT
 	public int fDia = 42;
 	public int tDia = 45;
-	public int hDia = lHeight-15;
+	public int hDia = lHeight-8;
 	
 	//KIES
 	public int fGravel = 46;

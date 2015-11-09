@@ -77,7 +77,7 @@ public class StaticMenues {
 		elements.add(new GUI_Element("Option 3", font, textColor, Action.NONE));
 		elements.add(new GUI_Element("<- Back", font, textColor, Action.guiBack));
 
-		GUI gui = new GUI(GUI_Type.optionMenu, Color.RED, elements, 100, 100);
+		GUI gui = new GUI(GUI_Type.optionMenu, Color.RED, elements, 100, 100, Game.gui.selected);
 
 		gui.setHeadline("Options");
 		

@@ -25,7 +25,12 @@ public class Sky {
 	
 	public int dayFrame = 0, dayTime = 12000;
 	public int changeFrame = 0, changeTime = 32;
+	
+	public static final String DAY = "Tag";
+	public static final String NIGHT = "Nacht";
 
+	public static final String[] NAMES = {NIGHT, DAY};
+	
 	public Sky() {
 		if (day == time) {
 			r = r1;
@@ -101,5 +106,9 @@ public class Sky {
 	public void render(Graphics gr) {
 		gr.setColor(new Color(r, g, b));
 		gr.fillRect(0, 0, Game.pixel.width, Game.pixel.height);
+	}
+	
+	public  String getDayTimeName(){
+		return NAMES[time];
 	}
 }

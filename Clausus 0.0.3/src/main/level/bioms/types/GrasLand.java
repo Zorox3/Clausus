@@ -10,7 +10,7 @@ public class GrasLand extends Biom {
 		this.STEP_MAX = 0.8;
 		this.STEP_CHANGE = 0.2;
 		this.HEIGHT_MAX = lHeight - 20;
-		this.HEIGHT_MIN = 30;
+		this.HEIGHT_MIN = 50;
 		
 		this.filler1 = Tile.dirt;
 		this.filler2 = Tile.dirt;

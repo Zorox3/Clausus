@@ -50,18 +50,17 @@ public class Listener implements KeyListener, MouseListener,
 			if (Game.debugRendering > 2)
 				Game.debugRendering = 0;
 			break;
-			
+
 		case KeyEvent.VK_F5:
 			Game.shadowDebug = Game.shadowDebug ? false : true;
 			break;
 		case KeyEvent.VK_UP:
-			Game.gui.selected --;
+			Game.gui.selected--;
 			break;
 		case KeyEvent.VK_DOWN:
-			Game.gui.selected ++; 
+			Game.gui.selected++;
 			break;
-		
-		
+
 		}
 
 	}
@@ -71,7 +70,15 @@ public class Listener implements KeyListener, MouseListener,
 		int key = e.getKeyCode();
 
 		switch (key) {
-
+		case KeyEvent.VK_PLUS:
+			Action.manageActions(Action.addTime);
+			break;
+		case KeyEvent.VK_MINUS:
+			Action.manageActions(Action.removeTime);
+			break;
+		case KeyEvent.VK_F12:
+			Action.manageActions(Action.switchTime);
+			break;
 		case KeyEvent.VK_V:
 			Action.manageActions(Action.toggelVsync);
 			break;
@@ -92,7 +99,7 @@ public class Listener implements KeyListener, MouseListener,
 			break;
 		case KeyEvent.VK_ENTER:
 			if (Game.gui.isActive())
-					Game.gui.performAction();
+				Game.gui.performAction();
 			break;
 		case KeyEvent.VK_D:
 		case KeyEvent.VK_RIGHT:
@@ -112,9 +119,9 @@ public class Listener implements KeyListener, MouseListener,
 			Game.isJumping = false;
 			break;
 		case KeyEvent.VK_ESCAPE:
-			if(Game.gui.isActive()){
+			if (Game.gui.isActive()) {
 				Game.gui.setActive(false);
-			}else{
+			} else {
 				Game.switchGui(StaticMenues.pauseMenu());
 			}
 			break;
@@ -129,20 +136,28 @@ public class Listener implements KeyListener, MouseListener,
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (e.getWheelRotation() > 0) {
-			if (Inventory.selected < Inventory.INV_CELL_LENGHT - 1) {
-				Inventory.selected++;
+			if (Game.gui.isActive()) {
+				Game.gui.selected++;
 			} else {
-				Inventory.selected = 0;
+				if (Inventory.selected < Inventory.INV_CELL_LENGHT - 1) {
+					Inventory.selected++;
+				} else {
+					Inventory.selected = 0;
+				}
+			}
+		}
+		if (e.getWheelRotation() < 0) {
+			if (Game.gui.isActive()) {
+				Game.gui.selected--;
+			} else {
+				if (Inventory.selected > 0) {
+					Inventory.selected--;
+				} else {
+					Inventory.selected = Inventory.INV_CELL_LENGHT - 1;
+				}
 			}
 		}
 
-		if (e.getWheelRotation() < 0) {
-			if (Inventory.selected > 0) {
-				Inventory.selected--;
-			} else {
-				Inventory.selected = Inventory.INV_CELL_LENGHT - 1;
-			}
-		}
 	}
 
 	@Override
@@ -159,7 +174,9 @@ public class Listener implements KeyListener, MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
+		if(Game.gui.isActive()){
+			Game.gui.performAction();
+		}
 	}
 
 	@Override

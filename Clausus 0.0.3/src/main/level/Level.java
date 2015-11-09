@@ -33,7 +33,7 @@ public class Level implements Runnable {
 
 	public static final int MINIMUM_CHUNKS_RENDERED = 3;
 	public static int CHUNKS_RENDERED = MINIMUM_CHUNKS_RENDERED;
-	public int lWidth = 32, lHeight = 64;
+	public int lWidth = 32, lHeight = 128;
 	public List<Block[][]> chunk = new ArrayList<Block[][]>();
 	public List<String> chunkNames = new ArrayList<>();
 	public WorldGeneration wg;
@@ -145,7 +145,7 @@ public class Level implements Runnable {
 
 	public void render(Graphics g) {
 		int counterX = 0;
-		int counterY = 0;
+		
 		// ShadowRenderer.updateShadow();
 		// Graphics2D image = (Graphics2D) shadowMap.getGraphics();
 		try {
@@ -156,7 +156,7 @@ public class Level implements Runnable {
 				for (int x = 0; x < lWidth; x++) {
 					counterX++;
 					for (int y = 0; y < lHeight; y++) {
-						counterY++;
+					
 
 						if (x >= 0 && y >= 0
 								&& x < chunk.get(i).length + (i * lWidth)
@@ -197,9 +197,6 @@ public class Level implements Runnable {
 									chunk.get(i)[x][y].drawChunkLine(g);
 								}
 							}
-						}
-						if (counterY >= lHeight) {
-
 						}
 					}
 				}
