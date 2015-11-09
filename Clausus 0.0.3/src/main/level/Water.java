@@ -7,8 +7,6 @@ public class Water {
 	private int lWidth = Game.level.lWidth;
 	private int lHeight = Game.level.lHeight;
 
-	private int waterTimer = 0;
-
 	public int[] waterTexture;
 	public int[] waterTexture_half;
 
@@ -18,154 +16,119 @@ public class Water {
 		this.level = level;
 	}
 
-	public void tickO() {
-
-		waterTimer++;
-
-		if (waterTimer >= 5) {
-
-			int i = 0;
-			for (int j = 0; j < level.chunk.size(); j++) {
-				i++;
-				int chunkSwitch = 0;
-				for (int x = 0; x < lWidth; x++) {
-
-					y: for (int y = 0; y < lHeight; y++) {
-
-						if (i > j) {
-							i = j;
-						}
-						if ((level.chunk.get(i)[x][y].id == waterTexture || level.chunk
-								.get(i)[x][y].id == waterTexture_half)) {
-
-							boolean movedDown = false;
-							if (level.chunk.get(i)[x][y + 1].id == Tile.air
-									|| level.chunk.get(i)[x][y + 1].id == waterTexture_half) {
-								level.chunk.get(i)[x][y].id = Tile.air;
-								level.chunk.get(i)[x][y + 1].id = waterTexture;
-								movedDown = true;
-								Game.updatesPerTick++;
-
-								break;
-							}
-							if (x + 1 >= lWidth) {
-								chunkSwitch = lWidth;
-								i++;
-							}
-							if (x + 1 < lWidth && x - 1 > 0) {
-								if (!movedDown
-										&& (level.chunk.get(i)[x - 1
-												- chunkSwitch][y].id == Tile.air
-												&& level.chunk.get(i)[x][y].id == waterTexture && (level.chunk
-												.get(i)[x][y - 1].id != waterTexture))) {
-									level.chunk.get(i)[x][y].id = Tile.air;
-									level.chunk.get(i)[x - 1 - chunkSwitch][y].id = waterTexture;
-									Game.updatesPerTick++;
-
-								}
-							}
-							if (x + 1 < lWidth && x - 1 > 0) {
-								if (level.chunk.get(i)[x - 1 - chunkSwitch][y].id == Tile.air
-										&& level.chunk.get(i)[x + 1
-												- chunkSwitch][y].id != Tile.air) {
-									level.chunk.get(i)[x][y].id = Tile.air;
-									level.chunk.get(i)[x - 1 - chunkSwitch][y].id = waterTexture_half;
-									Game.updatesPerTick++;
-
-								} else if (level.chunk.get(i)[x - 1
-										- chunkSwitch][y].id != Tile.air
-										&& level.chunk.get(i)[x + 1
-												- chunkSwitch][y].id == Tile.air) {
-									level.chunk.get(i)[x][y].id = waterTexture_half;
-									level.chunk.get(i)[x + 1 - chunkSwitch][y].id = waterTexture_half;
-									Game.updatesPerTick++;
-								}
-							}
-						} else
-							continue;
-					}
-				}
-			}
-			waterTimer = 0;
-		}
-
-	}
-
 	private int i = 0;
+
+	private boolean jumpOverRight = false;
+	private boolean jumpOverLeft = false;
 
 	public void tick() {
 
-		waterTimer++;
+		x: for (int x = 0; x < lWidth; x++) {
 
-		if (waterTimer > 1) {
+			y: for (int y = 0; y < lHeight; y++) {
 
-			int chunkSwitch = 0;
-			for (int x = 0; x < lWidth; x++) {
+				if ((level.chunk.get(i)[x][y].id == waterTexture || level.chunk
+						.get(i)[x][y].id == waterTexture_half)) {
 
-				y: for (int y = 0; y < lHeight; y++) {
+					// DOWN MOVEMENT
+					boolean movedDown = false;
 
-					if ((level.chunk.get(i)[x][y].id == waterTexture || level.chunk
-							.get(i)[x][y].id == waterTexture_half)) {
+					if (y + 1 >= lHeight) {
+						continue y;
+					}
 
-						
-						//DOWN MOVEMENT
-						boolean movedDown = false;
-						
-						if(y + 1 >= lHeight){
-							continue;
-						}
-						
-						if (level.chunk.get(i)[x][y + 1].id == Tile.air
-								|| level.chunk.get(i)[x][y + 1].id == waterTexture_half) {
+					if (level.chunk.get(i)[x][y + 1].id == Tile.air
+							|| level.chunk.get(i)[x][y + 1].id == waterTexture_half) {
+						level.chunk.get(i)[x][y].id = Tile.air;
+						level.chunk.get(i)[x][y + 1].id = waterTexture;
+						movedDown = true;
+
+						Game.updatesPerTick++;
+
+						continue x;
+					}
+
+					int tx = x + 1;
+					int tnx = x - 1;
+					int ti = i;
+					int tni = i;
+
+					if (tx >= lWidth) {
+						tx = 0;
+						ti += 1;
+					}
+					if (tnx < 0) {
+						tnx = lWidth - 1;
+						tni -= 1;
+					}
+
+					// Waterblock to HalfWater - left/right
+					if (!movedDown && level.chunk.get(ti)[tx][y].id == Tile.air
+							&& level.chunk.get(tni)[tnx][y].id == Tile.air) {
+
+						level.chunk.get(ti)[tx][y].id = waterTexture_half;
+						level.chunk.get(i)[x][y].id = Tile.air;
+						level.chunk.get(tni)[tnx][y].id = waterTexture_half;
+
+						Game.updatesPerTick++;
+					}
+
+					// waterflow right
+					else if (!movedDown
+							&& level.chunk.get(ti)[tx][y].id == Tile.air
+							&& !jumpOverRight) {
+
+						if (level.chunk.get(i)[x][y].id == waterTexture) {
+
+							level.chunk.get(ti)[tx][y].id = waterTexture_half;
+							level.chunk.get(i)[x][y].id = waterTexture_half;
+
+						} else {
+							level.chunk.get(ti)[tx][y].id = waterTexture;
 							level.chunk.get(i)[x][y].id = Tile.air;
-							level.chunk.get(i)[x][y + 1].id = waterTexture;
-							movedDown = true;
-
-							Game.updatesPerTick++;
-
-							break y;
-						}
-
-						if (x + 1 < lWidth && x - 1 >= 0) {
-							if (!movedDown
-									&& (level.chunk.get(i)[x - 1 - chunkSwitch][y].id == Tile.air
-											&& level.chunk.get(i)[x][y].id == waterTexture && (level.chunk
-											.get(i)[x][y - 1].id != waterTexture))) {
-								level.chunk.get(i)[x][y].id = Tile.air;
-								level.chunk.get(i)[x - 1 - chunkSwitch][y].id = waterTexture;
-
-								Game.updatesPerTick++;
-							}
-						}
-
-						if (x + 1 < lWidth && x - 1 >= 0) {
-							if (level.chunk.get(i)[x - 1 - chunkSwitch][y].id == Tile.air
-									&& level.chunk.get(i)[x + 1 - chunkSwitch][y].id != Tile.air) {
-								level.chunk.get(i)[x][y].id = Tile.air;
-								level.chunk.get(i)[x - 1 - chunkSwitch][y].id = waterTexture_half;
-
-								Game.updatesPerTick++;
-
-							} else if (level.chunk.get(i)[x - 1 - chunkSwitch][y].id != Tile.air
-									&& level.chunk.get(i)[x + 1 - chunkSwitch][y].id == Tile.air) {
-								level.chunk.get(i)[x][y].id = waterTexture_half;
-								level.chunk.get(i)[x + 1 - chunkSwitch][y].id = waterTexture_half;
-
-								Game.updatesPerTick++;
-							}
 
 						}
-					} else
-						continue;
-				}
-			}
 
-			waterTimer = 0;
-			// System.err.println(i);
-			i++;
-			if (i > Game.player.playerChunk + 2) {
-				i = Game.player.playerChunk - 2;
+						Game.updatesPerTick++;
+
+					}
+
+					// waterflow left
+					else if (!movedDown
+							&& level.chunk.get(tni)[tnx][y].id == Tile.air
+							&& !jumpOverLeft) {
+
+						if (level.chunk.get(i)[x][y].id == waterTexture) {
+							level.chunk.get(i)[x][y].id = waterTexture_half;
+							level.chunk.get(tni)[tnx][y].id = waterTexture;
+						} else {
+							level.chunk.get(i)[x][y].id = Tile.air;
+							level.chunk.get(tni)[tnx][y].id = waterTexture;
+						}
+
+						Game.updatesPerTick++;
+					}
+
+					// waterblock to halfwater convertion
+					if (level.chunk.get(i)[x][y].id == waterTexture
+							&& (level.chunk.get(ti)[tx][y].id == Tile.water_half && level.chunk
+									.get(tni)[tnx][y].id == Tile.water_half)) {
+
+						level.chunk.get(i)[x][y].id = waterTexture_half;
+
+						Game.updatesPerTick++;
+
+						break x;
+
+					}
+				} else
+					continue;
 			}
 		}
+		i++;
+		if (i > Game.player.playerChunk + 2) {
+			i = Game.player.playerChunk - 2;
+		}
+
 	}
 }

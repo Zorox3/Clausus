@@ -85,7 +85,6 @@ public class StartUp implements Runnable {
 						+ prozent + "%");
 			}
 
-			Thread.sleep(100);
 
 					
 			// Inventar vorbereiten und erstellen
@@ -97,7 +96,7 @@ public class StartUp implements Runnable {
 			//Game.mobs.add(new Mob((int)Game.player.positionX, (int)Game.player.positionY, Tile.TILE_SIZE, Tile.TILE_SIZE * 2, Tile.mob1_left, Tile.mob1_right));
 			
 
-			Game.shadow = new ShadowRenderer(Game.centerX, Game.centerY,Game.pixel.width/Game.PIXEL_SIZE, Game.pixel.height/Game.PIXEL_SIZE, 30);
+			//Game.shadow = new ShadowRenderer(Game.centerX, Game.centerY,Game.pixel.width/Game.PIXEL_SIZE, Game.pixel.height/Game.PIXEL_SIZE, 30);
 				
 			
 			

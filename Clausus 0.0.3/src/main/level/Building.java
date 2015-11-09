@@ -54,11 +54,12 @@ public class Building {
 									break;
 
 								}
-								if (!sb.equals(Tile.air)
-										&& Game.level.chunk.get(i)[x][y + 1].id == Tile.gras
-										|| Game.level.chunk.get(i)[x][y + 1].id == Tile.dirt_gras) {
-									Game.level.chunk.get(i)[x][y + 1].id = Tile.dirt;
-								}
+								if (y + 1 < lHeight)
+									if (!sb.equals(Tile.air)
+											&& Game.level.chunk.get(i)[x][y + 1].id == Tile.gras
+											|| Game.level.chunk.get(i)[x][y + 1].id == Tile.dirt_gras) {
+										Game.level.chunk.get(i)[x][y + 1].id = Tile.dirt;
+									}
 								break;
 							}
 						}

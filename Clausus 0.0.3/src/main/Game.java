@@ -34,7 +34,7 @@ public class Game extends Applet implements Runnable {
 	// PRIVATE STATIC FINALS VARs
 	private static final String TITLE = "Clausus";
 	private static final String VERSION = "0.0.4";
-	private static final String BUILD = "4eff317";
+	private static final String BUILD = "8f9b5c";
 	public static final int PIXEL_SIZE = 1;
 
 	// PUBLIC STATICS VARs
