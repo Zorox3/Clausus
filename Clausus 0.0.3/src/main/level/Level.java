@@ -2,23 +2,13 @@ package main.level;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import main.Game;
-import main.gfx.ShadowRenderer;
 import main.inventory.Inventory;
 import main.level.bioms.Biom;
 import main.level.bioms.types.Desert;

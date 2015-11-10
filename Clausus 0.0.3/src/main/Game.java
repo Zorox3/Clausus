@@ -2,7 +2,6 @@ package main;
 
 import java.applet.Applet;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -15,7 +14,6 @@ import javax.swing.JFrame;
 
 import main.entities.Mob;
 import main.entities.Player;
-import main.gfx.ShadowRenderer;
 import main.gfx.gui.GUI;
 import main.gfx.gui.menu.StaticMenues;
 import main.inventory.Inventory;
@@ -24,6 +22,7 @@ import main.level.Building;
 import main.level.Level;
 import main.level.Sky;
 import main.level.Water;
+import main.status.Console;
 import main.status.GameInfo;
 import main.status.Messages;
 
@@ -47,6 +46,7 @@ public class Game extends Applet implements Runnable {
 	public static Player player;
 	public static Inventory inventory;
 	public static Sky sky;
+	public static Console console;
 
 	public static double dir = 0;
 	public static boolean isMoving = false;
@@ -70,7 +70,8 @@ public class Game extends Applet implements Runnable {
 	public static int[] lastFrames = new int[20];
 	public static Building building;
 	public static Water water;
-	public static ShadowRenderer shadow;
+
+	public static boolean showConsole = false;
 
 	public static Thread cThread;
 	public static Thread lThread;
@@ -86,9 +87,13 @@ public class Game extends Applet implements Runnable {
 	public static GUI gui;
 	public static GUI lastGui;
 
+	public static int WIDTH;
+	public static int HEIGHT;
 	
-	public static Random globalRandom = new Random(getSeed());
-	
+	public static Long preSeed = 0L;
+
+	public static Random globalRandom;
+
 	// PRIVATE VARs
 	public static Image screen;
 	public static boolean vsync = true;
@@ -118,6 +123,9 @@ public class Game extends Applet implements Runnable {
 				/ PIXEL_SIZE);
 		winCenterX = pixel.width / 2;
 		winCenterY = pixel.height / 2;
+
+		WIDTH = pixel.width;
+		HEIGHT = pixel.height;
 
 		game.start();
 	}
@@ -180,6 +188,8 @@ public class Game extends Applet implements Runnable {
 		gui = StaticMenues.mainMenu();
 		gui.setActive(true);
 		messages = new Messages();
+		
+		console = new Console();
 		// messages.setMessageType(MessageTypes.START);
 
 		requestFocus();
@@ -213,7 +223,6 @@ public class Game extends Applet implements Runnable {
 			deltaRender += (now - lastTime) / nsPerTickRender;
 			lastTime = now;
 
-			
 			boolean shouldRender = !vsync;
 
 			if (delta >= 1) {
@@ -239,11 +248,10 @@ public class Game extends Applet implements Runnable {
 
 				lastFrames[i++] = frames;
 
-				if(i > lastFrames.length-1){
+				if (i > lastFrames.length - 1) {
 					i = 0;
 				}
-				
-				
+
 				frames = 0;
 				ticks = 0;
 
@@ -331,6 +339,10 @@ public class Game extends Applet implements Runnable {
 			gui.render(g);
 		}
 
+		if (showConsole) {
+			Game.console.render(g);
+		}
+
 		g = getGraphics();
 		g.drawImage(screen, 0, 0, size.width, size.height, 0, 0, pixel.width,
 				pixel.height, null);
@@ -347,7 +359,6 @@ public class Game extends Applet implements Runnable {
 
 	public static void switchGui(GUI guiNew) {
 		Game.gui.setActive(false);
-		boolean temp = false;
 
 		if (lastGui == null) {
 			Game.lastGui = Game.gui;
@@ -362,6 +373,9 @@ public class Game extends Applet implements Runnable {
 	}
 
 	public static long getSeed() {
+		if(preSeed > 0L){
+			return preSeed;
+		}
 		return Level.levelSeed;
 	}
 

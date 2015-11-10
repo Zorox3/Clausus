@@ -1,20 +1,17 @@
 package main;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import main.entities.Mob;
 import main.entities.Player;
-import main.entities.Swortsman;
-import main.gfx.ShadowRenderer;
 import main.inventory.Inventory;
 import main.level.BlockPhysic;
 import main.level.Building;
 import main.level.Level;
 import main.level.Sky;
 import main.level.Water;
-import main.level.bioms.trees.Tree;
 import main.level.blocks.Tile;
 import main.level.worldGeneration.WorldGeneration;
 import main.status.GameInfo;
@@ -29,6 +26,11 @@ public class StartUp implements Runnable {
 
 	public static void startGame() {
 		try {
+			
+			Game.globalRandom = new Random(Game.getSeed());
+			
+			
+			
 			// Vorbereitung der Nachrichtenausgaben
 			Game.messages.setMessageType(MessageTypes.CUSTOM_IMAGED_CENTERED);
 
@@ -62,7 +64,7 @@ public class StartUp implements Runnable {
 			Game.blockphysic = new BlockPhysic(Game.level);
 			// Wasser-Klasse erstellen
 			Game.water = new Water(Game.level);
-			// Building-Klasse erstellen -- Abbauen/Bauen von BlÃ¶cken
+			// Building-Klasse erstellen -- Abbauen/Bauen von Blöcken
 			Game.building = new Building();
 			Thread.sleep(100);
 
@@ -108,6 +110,7 @@ public class StartUp implements Runnable {
 			
 			
 			Game.gi = new GameInfo();
+			
 			
 			
 			// Rendern und Updates des Hauptspiels starten

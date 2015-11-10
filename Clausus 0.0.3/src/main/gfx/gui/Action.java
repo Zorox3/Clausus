@@ -7,7 +7,7 @@ import main.gfx.gui.menu.StaticMenues;
 
 public enum Action {
 
-	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime;
+	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime, showConsole;
 
 	public static void manageActions(Action a) {
 
@@ -52,6 +52,9 @@ public enum Action {
 			break;
 		case switchTime:
 			Game.sky.time = Game.sky.time == 1 ? 0 : 1;
+			break;
+		case showConsole:
+			Game.showConsole = Game.showConsole ? false : true;
 			break;
 		default:
 

@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowEvent;
 
 import main.gfx.gui.Action;
 import main.gfx.gui.menu.StaticMenues;
@@ -21,46 +20,47 @@ public class Listener implements KeyListener, MouseListener,
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		switch (key) {
-		case KeyEvent.VK_D:
-			Game.isMoving = true;
-			Game.dir = Game.player.movingSpeed;
-			break;
-		case KeyEvent.VK_A:
-			Game.isMoving = true;
-			Game.dir = -Game.player.movingSpeed;
-			break;
-		case KeyEvent.VK_SPACE:
-		case KeyEvent.VK_W:
-			Game.isJumping = true;
-			break;
-		case KeyEvent.VK_I:
-			Inventory.isOpen = Inventory.isOpen ? false : true;
-			break;
-		case KeyEvent.VK_F10:
-		case KeyEvent.VK_0:
+		if (!Game.showConsole) {
+			switch (key) {
+			case KeyEvent.VK_D:
+				Game.isMoving = true;
+				Game.dir = Game.player.movingSpeed;
+				break;
+			case KeyEvent.VK_A:
+				Game.isMoving = true;
+				Game.dir = -Game.player.movingSpeed;
+				break;
+			case KeyEvent.VK_SPACE:
+			case KeyEvent.VK_W:
+				Game.isJumping = true;
+				break;
+			case KeyEvent.VK_I:
+				Inventory.isOpen = Inventory.isOpen ? false : true;
+				break;
+			case KeyEvent.VK_F10:
+			case KeyEvent.VK_0:
 
-			break;
-		case KeyEvent.VK_F12:
-		case KeyEvent.VK_8:
+				break;
+			case KeyEvent.VK_F12:
+			case KeyEvent.VK_8:
 
-			break;
-		case KeyEvent.VK_F4:
-			Game.debugRendering++;
-			if (Game.debugRendering > 2)
-				Game.debugRendering = 0;
-			break;
+				break;
+			case KeyEvent.VK_F4:
+				Game.debugRendering++;
+				if (Game.debugRendering > 2)
+					Game.debugRendering = 0;
+				break;
 
-		case KeyEvent.VK_F5:
-			Game.shadowDebug = Game.shadowDebug ? false : true;
-			break;
-		case KeyEvent.VK_UP:
-			Game.gui.selected--;
-			break;
-		case KeyEvent.VK_DOWN:
-			Game.gui.selected++;
-			break;
-
+			case KeyEvent.VK_F5:
+				Game.shadowDebug = Game.shadowDebug ? false : true;
+				break;
+			case KeyEvent.VK_UP:
+				Game.gui.selected--;
+				break;
+			case KeyEvent.VK_DOWN:
+				Game.gui.selected++;
+				break;
+			}
 		}
 
 	}
@@ -68,64 +68,78 @@ public class Listener implements KeyListener, MouseListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
+		if (!Game.showConsole) {
+			switch (key) {
+			case KeyEvent.VK_PLUS:
+				Action.manageActions(Action.addTime);
+				break;
+			case KeyEvent.VK_MINUS:
+				Action.manageActions(Action.removeTime);
+				break;
+			case KeyEvent.VK_F12:
+				Action.manageActions(Action.switchTime);
+				break;
+			case KeyEvent.VK_V:
+				Action.manageActions(Action.toggelVsync);
+				break;
 
-		switch (key) {
-		case KeyEvent.VK_PLUS:
-			Action.manageActions(Action.addTime);
-			break;
-		case KeyEvent.VK_MINUS:
-			Action.manageActions(Action.removeTime);
-			break;
-		case KeyEvent.VK_F12:
-			Action.manageActions(Action.switchTime);
-			break;
-		case KeyEvent.VK_V:
-			Action.manageActions(Action.toggelVsync);
-			break;
+			case KeyEvent.VK_P:
+				Level.CHUNKS_RENDERED++;
+				if (Level.CHUNKS_RENDERED > Game.level.chunk.size()) {
+					Game.level.generateChunk();
+				}
+				break;
+			case KeyEvent.VK_O:
+				if (Level.CHUNKS_RENDERED > Level.MINIMUM_CHUNKS_RENDERED) {
+					Level.CHUNKS_RENDERED--;
+				}
+				break;
+			case KeyEvent.VK_F3:
+				Game.gameinfo = Game.gameinfo ? false : true;
+				break;
+			case KeyEvent.VK_ENTER:
+				if (Game.gui.isActive())
+					Game.gui.performAction();
+				break;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				if (Game.dir == Game.player.movingSpeed) {
+					Game.isMoving = false;
+				}
+				break;
 
-		case KeyEvent.VK_P:
-			Level.CHUNKS_RENDERED++;
-			if (Level.CHUNKS_RENDERED > Game.level.chunk.size()) {
-				Game.level.generateChunk();
-			}
-			break;
-		case KeyEvent.VK_O:
-			if (Level.CHUNKS_RENDERED > Level.MINIMUM_CHUNKS_RENDERED) {
-				Level.CHUNKS_RENDERED--;
-			}
-			break;
-		case KeyEvent.VK_F3:
-			Game.gameinfo = Game.gameinfo ? false : true;
-			break;
-		case KeyEvent.VK_ENTER:
-			if (Game.gui.isActive())
-				Game.gui.performAction();
-			break;
-		case KeyEvent.VK_D:
-		case KeyEvent.VK_RIGHT:
-			if (Game.dir == Game.player.movingSpeed) {
-				Game.isMoving = false;
-			}
-			break;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				if (Game.dir == -Game.player.movingSpeed) {
+					Game.isMoving = false;
+				}
+				break;
+			case KeyEvent.VK_SPACE:
+			case KeyEvent.VK_W:
+				Game.isJumping = false;
+				break;
+			case KeyEvent.VK_ESCAPE:
+				if (Game.gui.isActive()) {
+					Game.gui.setActive(false);
+				} else {
+					Game.switchGui(StaticMenues.pauseMenu());
+				}
+				break;
 
-		case KeyEvent.VK_A:
-		case KeyEvent.VK_LEFT:
-			if (Game.dir == -Game.player.movingSpeed) {
-				Game.isMoving = false;
 			}
-			break;
-		case KeyEvent.VK_SPACE:
-		case KeyEvent.VK_W:
-			Game.isJumping = false;
-			break;
-		case KeyEvent.VK_ESCAPE:
-			if (Game.gui.isActive()) {
-				Game.gui.setActive(false);
-			} else {
-				Game.switchGui(StaticMenues.pauseMenu());
+		}else{
+			Game.console.add2Command(e.getKeyChar());
+			if (key == KeyEvent.VK_ENTER) {
+				Game.console.addCommand();
+				for(String command : Game.console.getCommands()){
+					System.out.println(command);
+				}
 			}
-			break;
 		}
+		if (key == KeyEvent.VK_F10) {
+			Action.manageActions(Action.showConsole);
+		}
+
 
 	}
 
@@ -174,9 +188,10 @@ public class Listener implements KeyListener, MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(Game.gui.isActive()){
-			Game.gui.performAction();
-		}
+		if (!Game.showConsole)
+			if (Game.gui.isActive()) {
+				Game.gui.performAction();
+			}
 	}
 
 	@Override
