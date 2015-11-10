@@ -18,44 +18,40 @@ public class Block extends Rectangle {
 	}
 
 	public void render(Graphics g, double c) {
-		if (x - Game.sX < Game.pixel.width && y - Game.sY < Game.pixel.height)
-			if (id != Tile.air) {
-				if (c < 25 || !Game.showShadow)
-					g.drawImage(Tile.texture.get(id), x - Game.sX, y - Game.sY,
-							null);
-				if (Game.showShadow && !Game.level.noShadowList.contains(id))
-					renderShadow(g, c);
-			}
+		if (id != Tile.air) {
+			if(c < 25 || !Game.showShadow)
+				g.drawImage(Tile.texture.get(id), x - Game.sX, y - Game.sY, null);
+			if (Game.showShadow)
+				renderShadow(g, c);
+		}
 
 	}
 
 	private void renderShadow(Graphics g, double c) {
 		// if (id != Tile.wood && id != Tile.leaves && id != Tile.water
 		// && id != Tile.water_half)
-		int lum = 0;
-
-		lum = Game.sky.getMaxDarkness() * (int) c;
-		if (lum > 220 + Game.sky.getMaxDarkness()) {
-			lum = 220 + Game.sky.getMaxDarkness();
-		}
-		
-		
 		if (c <= 8) {
-			g.setColor(new Color(0, 0, 0, lum));
+			g.setColor(new Color(0, 0, 0, Game.sky.getDarkness()));
 			g.fillRect(x - Game.sX, y - Game.sY, Tile.TILE_SIZE, Tile.TILE_SIZE);
 		} else if (c > 8 && c <= 20) {
+			int lum = 0;
 
+			lum = Game.sky.getMaxDarkness() * (int) c;
+			if (lum > 220 + Game.sky.getMaxDarkness()) {
+				lum = 220 + Game.sky.getMaxDarkness();
+			}
 
 			g.setColor(new Color(0, 0, 0, lum));
 			g.fillRect(x - Game.sX, y - Game.sY, Tile.TILE_SIZE, Tile.TILE_SIZE);
 
-		} else if (c > 20 && c <= 25) {
+		}else if(c > 20 && c <= 25){
 			g.setColor(new Color(0, 0, 0, 230));
 			g.fillRect(x - Game.sX, y - Game.sY, Tile.TILE_SIZE, Tile.TILE_SIZE);
-		} else {
+		}else{
 			g.setColor(new Color(0, 0, 0, 255));
 			g.fillRect(x - Game.sX, y - Game.sY, Tile.TILE_SIZE, Tile.TILE_SIZE);
 		}
+	
 		//Game.updatesPerTick++;
 	}
 

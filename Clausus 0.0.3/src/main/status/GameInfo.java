@@ -90,7 +90,7 @@ public class GameInfo {
 
 			c++;
 		}
-		int nx = 20;
+		int nx = 10;
 		g.setColor(new Color(0,0,0,100));
 		g.fillRect(0, Game.pixel.height - 100, 150, 100);
 		
@@ -105,10 +105,10 @@ public class GameInfo {
 			}else if(f*2 < 60){
 				color = new Color(f*2, f*2, 0);
 			}
-			nx += 5;
+			nx += 7;
 			
 			g.setColor(color);
-			g.fillRect(nx, Game.pixel.height-f*2, 4, f*2);
+			g.fillRect(nx, Game.pixel.height-f*2, 6, f*2);
 		}
 
 	}

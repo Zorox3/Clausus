@@ -67,7 +67,7 @@ public class Game extends Applet implements Runnable {
 	// PUBLIC VARs
 	public static int ticks;
 	public static int frames;
-	public static int[] lastFrames = new int[20];
+	public static int[] lastFrames = new int[15];
 	public static Building building;
 	public static Water water;
 

@@ -118,7 +118,7 @@ public class WorldGeneration {
 							block[x][y].id = biom.overlayMaterial;
 						}
 					}
-				if (y > lHeight-38 && block[x][y].id == Tile.air)
+				if (y > lHeight-48 && block[x][y].id == Tile.air)
 					block[x][y].id = biom.water;
 			}
 		}

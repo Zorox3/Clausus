@@ -27,7 +27,7 @@ public class Level implements Runnable {
 	public List<Block[][]> chunk = new ArrayList<Block[][]>();
 	public List<String> chunkNames = new ArrayList<>();
 	public WorldGeneration wg;
-	public int maxChunks = 1000;
+	public static int maxChunks = 1000;
 
 	private List<Biom> bioms = new ArrayList<>();
 	public List<int[]> noShadowList = new ArrayList<>();
