@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.Game;
+import main.gfx.gui.Action;
 
 public class Console {
 
@@ -14,10 +15,13 @@ public class Console {
 	public static final Color FONT_COLOR = new Color(255, 255, 255);
 	public static final Font FONT = new Font("Franklin Gothic Demi", Font.BOLD,
 			20 / Game.PIXEL_SIZE);
-	
-	private List<String> lastCommands = new ArrayList<>();
 
-	private String command = "";
+	private List<Command> lastCommands = new ArrayList<>();
+
+	private String fullInput = "";
+
+	private String inputCommand = "";
+	private String inputValue = "";
 
 	private String pattern = "[a-zA-Z0-9\\s]*";
 
@@ -25,6 +29,28 @@ public class Console {
 	private int width = Game.WIDTH;
 
 	private int commandOffset = 20;
+
+	private List<Command> commandList = new ArrayList<>();
+
+	public Console() {
+		commandList.add(new Command("Command not Found! ", Action.NONE));
+
+		commandList.add(new Command("seed", Action.inputSeed));
+		Command temp = new Command("exit", Action.gameExit);
+		temp.setNoValue(true);
+		commandList.add(temp);
+		
+		temp = new Command("start", Action.gameStart);
+		temp.setNoValue(true);
+		commandList.add(temp);
+		
+		temp = new Command("vsync", Action.setVsync);
+		commandList.add(temp);
+		
+		temp = new Command("shadow", Action.setShadow);
+		commandList.add(temp);
+
+	}
 
 	public void tick() {
 
@@ -40,11 +66,13 @@ public class Console {
 		g.setColor(FONT_COLOR);
 		g.drawString(">", 100, Game.HEIGHT - 20);
 
-		g.drawString(command, 140, Game.HEIGHT - 20);
+		g.drawString(fullInput, 120, Game.HEIGHT - 20);
 
 		int yOffset = commandOffset * 2;
 		for (int i = lastCommands.size() - 1; i >= 0; i--) {
-			g.drawString(lastCommands.get(i), 140, Game.HEIGHT - yOffset);
+			g.setColor(lastCommands.get(i).getTextColor());
+			g.drawString("-> " + lastCommands.get(i).getFullCommand(), 100,
+					Game.HEIGHT - yOffset);
 			yOffset += commandOffset;
 		}
 
@@ -52,16 +80,34 @@ public class Console {
 
 	public void addCommand() {
 
-		lastCommands.add(command);
-		checkCommand(command);
-		command = "";
+		parseInput();
+
+		Command c = checkCommand(inputCommand);
+
+		if (c != null) {
+
+			Command newCommand = new Command(inputCommand, inputValue,
+					c.getAction());
+			newCommand.performAction();
+			lastCommands.add(newCommand);
+
+		} else {
+			Command invCommand = new Command(commandList.get(0).getCommand(),
+					fullInput, commandList.get(0).getAction());
+			invCommand.setTextColor(Command.ERROR);
+			lastCommands.add(invCommand);
+
+			System.err.println("No Command Found: " + fullInput);
+		}
+
+		fullInput = "";
 
 		if (lastCommands.size() > 8) {
 			lastCommands.remove(0);
 
-			List<String> TempLastCommands = new ArrayList<>();
+			List<Command> TempLastCommands = new ArrayList<>();
 
-			for (String temp : lastCommands) {
+			for (Command temp : lastCommands) {
 
 				TempLastCommands.add(temp);
 			}
@@ -70,41 +116,68 @@ public class Console {
 		}
 	}
 
-	private void checkCommand(String command) {
+	private void parseInput() {
+		String[] parts = fullInput.split(" ");
 
-		String[] parts = command.split(" ");
+		inputCommand = parts[0].trim();
+		if (parts.length >= 2)
+			inputValue = parts[1].trim();
 
-		if (parts.length >= 2) {
-			command = parts[0];
-			String value = parts[1].trim();
+	}
 
-			System.out.println(command + "" + value);
-
-			switch (command) {
-			case "seed":
-				Long tempSeed = new Long(30);
-				tempSeed = Long.parseUnsignedLong(value, 36);
-				Game.preSeed = tempSeed;
-				break;
-
-			default:
-				break;
+	private Command checkCommand(String command) {
+		for (Command c : commandList) {
+			if (c.getCommand().hashCode() == command.hashCode()) {
+				return c;
 			}
 		}
+		return null;
 	}
-	
-	
+
+	// private void checkCommand(String command) {
+	//
+	// String fullCommand = command;
+	//
+	// String[] parts = command.split(" ");
+	//
+	// if (parts.length >= 2) {
+	// command = parts[0];
+	// String value = parts[1].trim();
+	//
+	// System.out.println(command + "" + value);
+	//
+	// switch (command) {
+	// case "seed":
+	//
+	// Long tempSeed = Long.parseUnsignedLong(value, 36);
+	// Game.preSeed = tempSeed;
+	// break;
+	//
+	// default:
+	// this.command = "Invalid command: " + fullCommand;
+	// break;
+	// }
+	// } else {
+	// this.command = "Invalid command: " + fullCommand;
+	// }
+	// }
 
 	public void add2Command(char key) {
 		String k = String.valueOf(key);
 
 		if (k.matches(pattern)) {
-			command += key;
+			fullInput += key;
 		}
 	}
 
-	public List<String> getCommands() {
+	public List<Command> getCommands() {
 		return lastCommands;
+	}
+
+	public void removeLast() {
+		if (fullInput.length() > 0) {
+			fullInput = fullInput.substring(0, fullInput.length() - 1);
+		}
 	}
 
 }

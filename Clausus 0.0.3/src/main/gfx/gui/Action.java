@@ -7,10 +7,9 @@ import main.gfx.gui.menu.StaticMenues;
 
 public enum Action {
 
-	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime, showConsole;
+	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime, showConsole, inputSeed, setVsync, setShadow;
 
-	public static void manageActions(Action a) {
-
+	public static void manageActions(Action a, Object o) {
 		switch (a) {
 
 		case gameStart:
@@ -28,7 +27,7 @@ public enum Action {
 					WindowEvent.WINDOW_CLOSING));
 			break;
 		case gamePause:
-			
+
 			break;
 		case gameContinue:
 			Game.gui.setActive(false);
@@ -39,16 +38,22 @@ public enum Action {
 		case toggelVsync:
 			Game.vSync(Game.vsync ? false : true);
 			Game.switchGui(StaticMenues.gameOptions());
-			break; 
+			break;
+		case setVsync:
+				Game.vSync(Boolean.valueOf((String)o));
+			break;
+		case setShadow:
+				Game.showShadow = Boolean.valueOf((String)o);
+			break;
 		case showShadow:
 			Game.showShadow = Game.showShadow ? false : true;
 			Game.switchGui(StaticMenues.gameOptions());
 			break;
 		case addTime:
-			Game.sky.dayFrame+=1000;
+			Game.sky.dayFrame += 1000;
 			break;
 		case removeTime:
-			Game.sky.dayFrame-=1000;
+			Game.sky.dayFrame -= 1000;
 			break;
 		case switchTime:
 			Game.sky.time = Game.sky.time == 1 ? 0 : 1;
@@ -56,9 +61,18 @@ public enum Action {
 		case showConsole:
 			Game.showConsole = Game.showConsole ? false : true;
 			break;
+		case inputSeed:
+			Long tempSeed = Long.parseUnsignedLong((String) o, 36);
+			Game.preSeed = tempSeed;
+			break;
 		default:
 
 		}
+	}
+
+	public static void manageActions(Action a) {
+
+		manageActions(a, null);
 
 	}
 

@@ -98,6 +98,9 @@ public class GameInfo {
 		for (int f : Game.lastFrames) {
 			
 			if(f*2 > 60){
+				if(f*2 >= 255){
+					f = 255/2 - 1;
+				}
 				color = new Color(0, f*2, 0);
 			}else if(f*2 < 60){
 				color = new Color(f*2, f*2, 0);

@@ -128,15 +128,16 @@ public class Listener implements KeyListener, MouseListener,
 
 			}
 		}else{
-			Game.console.add2Command(e.getKeyChar());
 			if (key == KeyEvent.VK_ENTER) {
 				Game.console.addCommand();
-				for(String command : Game.console.getCommands()){
-					System.out.println(command);
-				}
+			}else if(key == KeyEvent.VK_BACK_SPACE){
+				Game.console.removeLast();
+			}
+			else{
+				Game.console.add2Command(e.getKeyChar());
 			}
 		}
-		if (key == KeyEvent.VK_F10) {
+		if (key == KeyEvent.VK_F9) {
 			Action.manageActions(Action.showConsole);
 		}
 
