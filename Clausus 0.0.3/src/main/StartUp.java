@@ -27,7 +27,22 @@ public class StartUp implements Runnable {
 	public static void startGame() {
 		try {
 			
-			Game.globalRandom = new Random(Game.getSeed());
+			
+			if(Game.isClient){
+				while(true){
+					if(Game.client.input.getData("seed") != "-1"){
+					Game.preSeed = Long.parseLong(Game.client.input.getData("seed"));
+					System.out.println("Seed: " + Long.parseLong(Game.client.input.getData("seed")));
+					break;
+					}
+				}
+			}
+
+				Game.globalRandom = new Random(Game.getSeed());
+			
+			
+			
+			
 			
 			
 			
@@ -116,6 +131,8 @@ public class StartUp implements Runnable {
 			// Rendern und Updates des Hauptspiels starten
 			Game.gameStart = true;
 
+
+			
 			
 			// Nachrichten ausstellen
 			Game.messages.setMessageType(MessageTypes.NONE);

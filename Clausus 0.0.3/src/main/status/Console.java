@@ -49,6 +49,13 @@ public class Console {
 		
 		temp = new Command("shadow", Action.setShadow);
 		commandList.add(temp);
+		
+		temp = new Command("server", Action.serverStart);
+		temp.setNoValue(true);
+		commandList.add(temp);
+		
+		
+		commandList.add(new Command("client", Action.clientStart));
 
 	}
 

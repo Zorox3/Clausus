@@ -6,12 +6,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
+import main.entities.ClientPlayer;
 import main.entities.Mob;
 import main.entities.Player;
 import main.gfx.gui.GUI;
@@ -22,9 +25,13 @@ import main.level.Building;
 import main.level.Level;
 import main.level.Sky;
 import main.level.Water;
+import main.level.blocks.Tile;
 import main.status.Console;
 import main.status.GameInfo;
+import main.status.MessageTypes;
 import main.status.Messages;
+import net.client.Client;
+import net.server.Server;
 
 public class Game extends Applet implements Runnable {
 
@@ -39,7 +46,7 @@ public class Game extends Applet implements Runnable {
 	// PUBLIC STATICS VARs
 	public static JFrame frame;
 	public static Dimension realSize;
-	public static Dimension size = new Dimension(1280, 720);
+	public static Dimension size = new Dimension(800, 600);
 	public static boolean isRunning = false;
 	public static Dimension pixel;
 	public static Level level;
@@ -89,7 +96,7 @@ public class Game extends Applet implements Runnable {
 
 	public static int WIDTH;
 	public static int HEIGHT;
-	
+
 	public static Long preSeed = 0L;
 
 	public static Random globalRandom;
@@ -104,11 +111,21 @@ public class Game extends Applet implements Runnable {
 
 	public static boolean shadowDebug = false;
 
+	public static Server server;
+
+	public static Client client;
+
+	public static boolean isServer;
+
+	public static boolean isClient;
+
+	public static ClientPlayer clientPlayer;
+
 	public static void main(String args[]) {
 		game = new Game();
 
 		frame = new JFrame();
-		frame.setUndecorated(true);
+		// frame.setUndecorated(true);
 		frame.setTitle(TITLE + " " + VERSION + ": Build: " + BUILD);
 		frame.add(game);
 		frame.pack();
@@ -188,9 +205,8 @@ public class Game extends Applet implements Runnable {
 		gui = StaticMenues.mainMenu();
 		gui.setActive(true);
 		messages = new Messages();
-		
+
 		console = new Console();
-		// messages.setMessageType(MessageTypes.START);
 
 		requestFocus();
 	}
@@ -241,6 +257,10 @@ public class Game extends Applet implements Runnable {
 				render();
 			}
 
+			if (System.currentTimeMillis() - lastTimer >= 50) {
+				secondTick();
+			}
+
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
 				Game.frames = frames;
@@ -262,6 +282,58 @@ public class Game extends Applet implements Runnable {
 		}
 	}
 
+	private void secondTick() {
+
+		if (isServer && gameStart) {
+
+			client.addMessage("x", String.valueOf((int) player.x));
+			client.addMessage("y", String.valueOf((int) player.y));
+
+			if (clientPlayer == null) {
+				clientPlayer = new ClientPlayer(Tile.TILE_SIZE,
+						Tile.TILE_SIZE * 2);
+			} else {
+				clientPlayer.x = Integer.valueOf(client.input.getData("x"));
+				clientPlayer.y = Integer.valueOf(client.input.getData("y"));
+			}
+
+		} else if (isClient && gameStart) {
+
+			if (client.isConnected()) {
+				clientPlayer = new ClientPlayer(Tile.TILE_SIZE,
+						Tile.TILE_SIZE * 2);
+
+				clientPlayer.x = Integer.valueOf(client.input.getData("x"));
+				clientPlayer.y = Integer.valueOf(client.input.getData("y"));
+
+				client.addMessage("x", String.valueOf((int) player.x));
+				client.addMessage("y", String.valueOf((int) player.y));
+
+			}
+
+		}
+
+		if (client != null) {
+			if (client.input != null) {
+				String updateString[] = client.input.getData("block")
+						.split(" ");
+				int updateInt[] = new int [5];
+				int i = 0;
+				for (String s : updateString) {
+					updateInt[i] = Integer.valueOf(s);
+					i++;
+				}
+				if (updateInt[0] != -1) {
+					level.chunk.get(updateInt[0])[updateInt[1]][updateInt[2]].id = new int[] {
+							updateInt[3], updateInt[4] };
+					
+				}
+			}
+
+			client.sendMessages();
+		}
+	}
+
 	// ###############################################################################
 	// ###############################################################################
 
@@ -278,6 +350,7 @@ public class Game extends Applet implements Runnable {
 			if (!Inventory.isOpen && !gui.isActive()) {
 				level.tick();
 				player.tick();
+
 				building.tick();
 				water.tick();
 				blockphysic.tick();
@@ -319,6 +392,10 @@ public class Game extends Applet implements Runnable {
 
 			if (!gui.isActive()) {
 				player.render(g);
+			}
+
+			if (clientPlayer != null) {
+				clientPlayer.render(g);
 			}
 
 			level.render(g);
@@ -373,7 +450,7 @@ public class Game extends Applet implements Runnable {
 	}
 
 	public static long getSeed() {
-		if(preSeed > 0L){
+		if (preSeed > 0L) {
 			return preSeed;
 		}
 		return Level.levelSeed;

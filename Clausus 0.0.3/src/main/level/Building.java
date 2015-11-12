@@ -49,8 +49,14 @@ public class Building {
 
 								if (!sb.equals(Tile.air)
 										&& Game.level.chunk.get(i)[x][y].id == Tile.air) {
-									if (Inventory.decrease(sb))
+									if (Inventory.decrease(sb)) {
 										Game.level.chunk.get(i)[x][y].id = sb;
+										if (Game.isClient || Game.isServer) {
+											Game.client.addMessage("block", i
+													+ " " + x + " " + y + " "
+													+ sb[0] + " " + sb[1]);
+										}
+									}
 									break;
 
 								}
@@ -92,6 +98,13 @@ public class Building {
 								if (Inventory
 										.increase(Game.level.chunk.get(i)[x][y].id)) {
 									Game.level.chunk.get(i)[x][y].id = Tile.air;
+									if (Game.isClient || Game.isServer) {
+										if (Game.isClient || Game.isServer) {
+											Game.client.addMessage("block", i
+													+ " " + x + " " + y + " "
+													+ "0 0");
+										}
+									}
 									break;
 								}
 							}

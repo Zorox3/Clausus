@@ -27,7 +27,7 @@ public class Level implements Runnable {
 	public List<Block[][]> chunk = new ArrayList<Block[][]>();
 	public List<String> chunkNames = new ArrayList<>();
 	public WorldGeneration wg;
-	public static int maxChunks = 1000;
+	public static int maxChunks = 7;
 
 	private List<Biom> bioms = new ArrayList<>();
 	public List<int[]> noShadowList = new ArrayList<>();
@@ -137,9 +137,15 @@ public class Level implements Runnable {
 	public void render(Graphics g) {
 		int counterX = 0;
 
-		// ShadowRenderer.updateShadow();
-		// Graphics2D image = (Graphics2D) shadowMap.getGraphics();
+		
+		
+		
 		try {
+			
+//			List<Block[][]> chunk = new ArrayList<>();
+//			chunk.addAll(this.chunk);
+			
+			
 			for (int i = Game.player.playerChunk == 0 ? 0
 					: Game.player.playerChunk - 1; i < (Game.player.playerChunk == 0 ? 0
 					: Game.player.playerChunk - 1)
