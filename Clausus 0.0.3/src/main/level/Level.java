@@ -27,7 +27,7 @@ public class Level implements Runnable {
 	public List<Block[][]> chunk = new ArrayList<Block[][]>();
 	public List<String> chunkNames = new ArrayList<>();
 	public WorldGeneration wg;
-	public static int maxChunks = 7;
+	public static int maxChunks = 100;
 
 	private List<Biom> bioms = new ArrayList<>();
 	public List<int[]> noShadowList = new ArrayList<>();
@@ -137,15 +137,11 @@ public class Level implements Runnable {
 	public void render(Graphics g) {
 		int counterX = 0;
 
-		
-		
-		
 		try {
-			
-//			List<Block[][]> chunk = new ArrayList<>();
-//			chunk.addAll(this.chunk);
-			
-			
+
+			// List<Block[][]> chunk = new ArrayList<>();
+			// chunk.addAll(this.chunk);
+
 			for (int i = Game.player.playerChunk == 0 ? 0
 					: Game.player.playerChunk - 1; i < (Game.player.playerChunk == 0 ? 0
 					: Game.player.playerChunk - 1)
@@ -154,48 +150,53 @@ public class Level implements Runnable {
 					counterX++;
 					for (int y = 0; y < lHeight; y++) {
 
-						if (x >= 0 && y >= 0
-								&& x < chunk.get(i).length + (i * lWidth)
-								&& y < chunk.get(i)[0].length) {
+						if (i < chunk.size())
+							if (x >= 0 && y >= 0
+									&& x < chunk.get(i).length + (i * lWidth)
+									&& y < chunk.get(i)[0].length) {
 
-							if (chunk.get(i)[x][y].id != Tile.air) {
-								double c = 0;
-								if (x - Game.sX < Game.pixel.width
-										&& y - Game.sY < Game.pixel.height)
-									if (y - 4 >= 0) {
-										if (!noShadowList
-												.contains(chunk.get(i)[x][y - 4].id)) {
-											double nx = (chunk.get(i)[x][y].x - Game.player.x);
-											double ny = (chunk.get(i)[x][y].y - Game.player.y);
-											c = Math.sqrt((nx * nx) + (ny * ny))
-													/ Tile.TILE_SIZE;
+								if (chunk.get(i)[x][y].id != Tile.air) {
+									double c = 0;
+									if (x - Game.sX < Game.pixel.width
+											&& y - Game.sY < Game.pixel.height)
+										if (y - 4 >= 0) {
+											if (!noShadowList.contains(chunk
+													.get(i)[x][y - 4].id)) {
+												double nx = (chunk.get(i)[x][y].x - Game.player.x);
+												double ny = (chunk.get(i)[x][y].y - Game.player.y);
+												c = Math.sqrt((nx * nx)
+														+ (ny * ny))
+														/ Tile.TILE_SIZE;
 
+											}
+										}
+									if (Game.gameinfo
+											&& Game.debugRendering == 1) {
+
+										chunk.get(i)[x][y].debugRenderer(g, c);
+
+									} else {
+										chunk.get(i)[x][y].render(g, c);
+									}
+
+									if (!Inventory.isOpen) {
+										if (chunk.get(i)[x][y]
+												.contains(Game.mouse)) {
+											g.setColor(new Color(0, 0, 0));
+											g.drawRect(
+													chunk.get(i)[x][y].x - camX,
+													chunk.get(i)[x][y].y - camY,
+													chunk.get(i)[x][y].width - 1,
+													chunk.get(i)[x][y].height - 1);
 										}
 									}
-								if (Game.gameinfo && Game.debugRendering == 1) {
-
-									chunk.get(i)[x][y].debugRenderer(g, c);
-
-								} else {
-									chunk.get(i)[x][y].render(g, c);
 								}
-
-								if (!Inventory.isOpen) {
-									if (chunk.get(i)[x][y].contains(Game.mouse)) {
-										g.setColor(new Color(0, 0, 0));
-										g.drawRect(chunk.get(i)[x][y].x - camX,
-												chunk.get(i)[x][y].y - camY,
-												chunk.get(i)[x][y].width - 1,
-												chunk.get(i)[x][y].height - 1);
+								if (Game.gameinfo && Game.debugRendering == 2) {
+									if (counterX >= lWidth) {
+										chunk.get(i)[x][y].drawChunkLine(g);
 									}
 								}
 							}
-							if (Game.gameinfo && Game.debugRendering == 2) {
-								if (counterX >= lWidth) {
-									chunk.get(i)[x][y].drawChunkLine(g);
-								}
-							}
-						}
 					}
 				}
 				counterX = 0;

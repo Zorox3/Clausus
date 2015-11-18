@@ -25,6 +25,7 @@ public class Client implements Runnable {
 	private int port;
 
 	public Input input;
+	private boolean canSend;
 
 	public Client(int id, String ip, int port) throws IOException {
 		this.id = id;
@@ -37,27 +38,31 @@ public class Client implements Runnable {
 
 		this.clientThread = new Thread(this, "Client Thread" + id);
 		this.clientThread.start();
+		canSend = true;
 
 	}
 
 	public void addMessage(String key, String message) {
 		outputList.add(key + ":" + message);
 	}
+
 	public void addMessage(String key, int x) {
-		addMessage(key, String.valueOf(x));		
+		addMessage(key, String.valueOf(x));
 	}
-	
+
 	public void addMessage(String key, int[] array) {
-		addMessage(key, array[0] + "," + array[1] );		
+		addMessage(key, array[0] + "," + array[1]);
 	}
 
 	public void sendMessages() {
 		for (String output : new ArrayList<>(outputList)) {
 			try {
-				out.writeUTF((id * this.hashCode() + ":" + output).trim());
-				outputList.remove(output);
+				if (canSend) {
+					out.writeUTF((id * this.hashCode() + ":" + output).trim());
+					outputList.remove(output);
+				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				canSend = false;
 			}
 
 		}
@@ -94,7 +99,5 @@ public class Client implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

@@ -257,7 +257,7 @@ public class Game extends Applet implements Runnable {
 				render();
 			}
 
-			if (System.currentTimeMillis() - lastTimer >= 50) {
+			if (System.currentTimeMillis() - lastTimer >= 15) {
 				secondTick();
 			}
 
@@ -282,13 +282,14 @@ public class Game extends Applet implements Runnable {
 		}
 	}
 
-	private void secondTick() {
+	public void secondTick() {
 
 		if (isServer && gameStart) {
 
-			client.addMessage("x", String.valueOf((int) player.x));
-			client.addMessage("y", String.valueOf((int) player.y));
-
+			if (isMoving) {
+				client.addMessage("x", String.valueOf((int) player.x));
+				client.addMessage("y", String.valueOf((int) player.y));
+			}
 			if (clientPlayer == null) {
 				clientPlayer = new ClientPlayer(Tile.TILE_SIZE,
 						Tile.TILE_SIZE * 2);
@@ -305,10 +306,11 @@ public class Game extends Applet implements Runnable {
 
 				clientPlayer.x = Integer.valueOf(client.input.getData("x"));
 				clientPlayer.y = Integer.valueOf(client.input.getData("y"));
-
-				client.addMessage("x", String.valueOf((int) player.x));
-				client.addMessage("y", String.valueOf((int) player.y));
-
+				
+				if (isMoving) {
+					client.addMessage("x", String.valueOf((int) player.x));
+					client.addMessage("y", String.valueOf((int) player.y));
+				}
 			}
 
 		}
@@ -317,7 +319,7 @@ public class Game extends Applet implements Runnable {
 			if (client.input != null) {
 				String updateString[] = client.input.getData("block")
 						.split(" ");
-				int updateInt[] = new int [5];
+				int updateInt[] = new int[5];
 				int i = 0;
 				for (String s : updateString) {
 					updateInt[i] = Integer.valueOf(s);
@@ -326,7 +328,7 @@ public class Game extends Applet implements Runnable {
 				if (updateInt[0] != -1) {
 					level.chunk.get(updateInt[0])[updateInt[1]][updateInt[2]].id = new int[] {
 							updateInt[3], updateInt[4] };
-					
+
 				}
 			}
 

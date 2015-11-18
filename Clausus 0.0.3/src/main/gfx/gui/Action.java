@@ -65,7 +65,7 @@ public enum Action {
 			Game.showConsole = Game.showConsole ? false : true;
 			break;
 		case inputSeed:
-			Long tempSeed = Long.parseUnsignedLong((String) o, 36);
+			Long tempSeed = Long.parseLong((String) o, 36);
 			Game.preSeed = tempSeed;
 			break;
 		case serverStart:
@@ -87,7 +87,7 @@ public enum Action {
 				Game.client = new Client(2, (String)o, 7777);
 				Game.client.start();
 				while(!Game.client.isConnected()){
-					
+					System.out.println("T");
 				}				
 				Action.manageActions(gameStart);
 			} catch (IOException e) {
