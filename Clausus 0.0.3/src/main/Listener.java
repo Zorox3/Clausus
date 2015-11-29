@@ -105,7 +105,7 @@ public class Listener implements KeyListener, MouseListener,
 			case KeyEvent.VK_RIGHT:
 				if (Game.dir == Game.player.movingSpeed) {
 					Game.isMoving = false;
-					Game.game.secondTick();
+					Game.game.secondTick(true);
 				}
 				break;
 
@@ -113,7 +113,7 @@ public class Listener implements KeyListener, MouseListener,
 			case KeyEvent.VK_LEFT:
 				if (Game.dir == -Game.player.movingSpeed) {
 					Game.isMoving = false;
-					Game.game.secondTick();
+					Game.game.secondTick(true);
 				}
 				break;
 			case KeyEvent.VK_SPACE:

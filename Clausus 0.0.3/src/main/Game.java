@@ -6,10 +6,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.security.CodeSource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -28,7 +26,6 @@ import main.level.Water;
 import main.level.blocks.Tile;
 import main.status.Console;
 import main.status.GameInfo;
-import main.status.MessageTypes;
 import main.status.Messages;
 import net.client.Client;
 import net.server.Server;
@@ -258,7 +255,7 @@ public class Game extends Applet implements Runnable {
 			}
 
 			if (System.currentTimeMillis() - lastTimer >= 15) {
-				secondTick();
+				secondTick(isMoving);
 			}
 
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
@@ -275,6 +272,8 @@ public class Game extends Applet implements Runnable {
 				frames = 0;
 				ticks = 0;
 
+				secondTick(true);
+				
 				setUpdatesPerTick();
 				Game.updatesPerTick = 0;
 			}
@@ -282,7 +281,7 @@ public class Game extends Applet implements Runnable {
 		}
 	}
 
-	public void secondTick() {
+	public void secondTick(boolean isMoving) {
 
 		if (isServer && gameStart) {
 

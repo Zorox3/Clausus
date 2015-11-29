@@ -34,6 +34,9 @@ public class Tile {
 	public static int[] water_quater = { 14, 0 };
 	public static int[] water_swamp = { 12, 1 };
 	public static int[] water_half_swamp = { 13, 0 };
+	public static int[] water_smooth_right = { 15, 0 };
+	public static int[] water_smooth_left = { 16, 0 };
+	
 	
 	
 	public static Map<int[], BufferedImage> texture = new HashMap<>();
@@ -80,6 +83,9 @@ public class Tile {
 		texture.put(sandstone, sprite.getSubimage(sandstone[0]*TILE_SIZE, sandstone[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 		texture.put(water, sprite.getSubimage(water[0]*TILE_SIZE, water[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 		texture.put(water_half, sprite.getSubimage(water_half[0]*TILE_SIZE, water_half[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE));
+		
+		texture.put(water_smooth_right, sprite.getSubimage(water_smooth_right[0]*TILE_SIZE, water_smooth_right[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE));
+		texture.put(water_smooth_left, sprite.getSubimage(water_smooth_left[0]*TILE_SIZE, water_smooth_left[1]*TILE_SIZE, TILE_SIZE, TILE_SIZE));
 		
 		
 		
