@@ -7,10 +7,11 @@ import net.client.Client;
 import net.server.Server;
 import main.Game;
 import main.gfx.gui.menu.StaticMenues;
+import main.level.Level;
 
 public enum Action {
 
-	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime, showConsole, inputSeed, setVsync, setShadow, serverStart, clientStart;
+	NONE, gameStart, gameOptions, gameExit, gamePause, gameContinue, toggelVsync, guiBack, showShadow, addTime, removeTime, switchTime, showConsole, inputSeed, setVsync, setShadow, serverStart, clientStart, maxChunks;
 
 	public static void manageActions(Action a, Object o) {
 		switch (a) {
@@ -25,7 +26,7 @@ public enum Action {
 			Game.switchGui(StaticMenues.gameOptions());
 			break;
 		case gameExit:
-			Game.game.stop();
+			Game.instance.stop();
 			Game.frame.dispatchEvent(new WindowEvent(Game.frame,
 					WindowEvent.WINDOW_CLOSING));
 			break;
@@ -94,6 +95,8 @@ public enum Action {
 				e.printStackTrace();
 			}
 			break;
+		case maxChunks:
+			Level.maxChunks = Integer.valueOf((String) o);
 		default:
 
 		}

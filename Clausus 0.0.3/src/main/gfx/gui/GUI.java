@@ -66,9 +66,9 @@ public class GUI {
 	public void render(Graphics g) {
 		if (bgImage == null) {
 			g.setColor(bgColor);
-			g.fillRect(0, 0, Game.pixel.width, Game.pixel.height);
+			g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		} else {
-			g.drawImage(bgImage, 0, 0, Game.pixel.width, Game.pixel.height,
+			g.drawImage(bgImage, 0, 0, Game.WIDTH, Game.HEIGHT,
 					null);
 		}
 

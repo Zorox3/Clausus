@@ -38,11 +38,11 @@ public class Inventory {
 		for (int i = 0; i < INV_CELL_LENGHT; i++) {
 			cells.add(new Cell(
 					new Rectangle(
-							(Game.pixel.width / 2)
+							(Game.WIDTH / 2)
 									+ (i * (INV_CELL_SIZE + INV_CELL_SPACE) + INV_CELL_SPACE)
 									- ((INV_CELL_LENGHT
 											* (INV_CELL_SIZE + INV_CELL_SPACE) + INV_CELL_SPACE) / 2),
-							Game.pixel.height
+							Game.HEIGHT
 									- (INV_CELL_SIZE + INV_CELL_BORDER_SPACE),
 							INV_CELL_SIZE, INV_CELL_SIZE), Tile.air, 0));
 		}
@@ -53,11 +53,11 @@ public class Inventory {
 		for (int i = 0; i < INV_BACKPACK_SLOTS; i++) {
 			backpack.add(new Cell(
 					new Rectangle(
-							(Game.pixel.width / 2)
+							(Game.WIDTH / 2)
 									+ (x * (INV_CELL_SIZE + INV_CELL_SPACE) + INV_CELL_SPACE)
 									- ((INV_CELL_LENGHT
 											* (INV_CELL_SIZE + INV_CELL_SPACE) + INV_CELL_SPACE) / 2),
-							Game.pixel.height
+							Game.HEIGHT
 
 									- (INV_CELL_SIZE + INV_CELL_BORDER_SPACE)
 									- (INV_BACKPACK_HEIGHT * (INV_CELL_SIZE + INV_CELL_SPACE))
@@ -135,7 +135,7 @@ public class Inventory {
 
 		if (isOpen) {
 			g.setColor(new Color(0, 0, 0, 60));
-			g.fillRect(0, 0, Game.pixel.width, Game.pixel.height);
+			g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
 			for (int i = 0; i < backpack.size(); i++) {
 				backpack.get(i).render(g, false);

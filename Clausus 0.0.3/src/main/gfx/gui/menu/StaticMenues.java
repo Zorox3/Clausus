@@ -29,7 +29,7 @@ public class StaticMenues {
 				Action.gameOptions));
 		elements.add(new GUI_Element("Exit", font, textColor, Action.gameExit));
 
-		GUI gui = new GUI(GUI_Type.mainMenu, Color.RED, elements, Game.pixel.width / 2 - 130, 100);
+		GUI gui = new GUI(GUI_Type.mainMenu, Color.RED, elements, Game.WIDTH / 2 - 130, 100);
 
 		gui.setHeadline("CLAUSUS");
 		try {

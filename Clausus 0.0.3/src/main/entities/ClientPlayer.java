@@ -28,7 +28,7 @@ public class ClientPlayer extends DoubleRectangle {
 	public int playerChunk = Game.level.maxChunks - 1;
 
 	public ClientPlayer(int width, int height) {
-		setBounds((Game.pixel.width / 2) - (width / 2), (Game.pixel.height / 2)
+		setBounds((Game.WIDTH / 2) - (width / 2), (Game.HEIGHT / 2)
 				- (height / 2), width, height);
 
 

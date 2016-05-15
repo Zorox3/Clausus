@@ -157,8 +157,8 @@ public class Level implements Runnable {
 
 								if (chunk.get(i)[x][y].id != Tile.air) {
 									double c = 0;
-									if (x - Game.sX < Game.pixel.width
-											&& y - Game.sY < Game.pixel.height)
+									if (x - Game.sX < Game.WIDTH
+											&& y - Game.sY < Game.HEIGHT)
 										if (y - 4 >= 0) {
 											if (!noShadowList.contains(chunk
 													.get(i)[x][y - 4].id)) {

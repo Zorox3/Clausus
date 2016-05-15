@@ -28,7 +28,7 @@ public class Player extends DoubleRectangle {
 	public int playerChunk = Game.level.maxChunks - 1;
 
 	public Player(int width, int height) {
-		setBounds((Game.pixel.width / 2) - (width / 2), (Game.pixel.height / 2)
+		setBounds((Game.WIDTH / 2) - (width / 2), (Game.HEIGHT / 2)
 				- (height / 2), width, height);
 
 		int posX = ((Game.level.maxChunks - 1) * Tile.TILE_SIZE * Game.level.lWidth) / 2;

@@ -92,7 +92,7 @@ public class GameInfo {
 		}
 		int nx = 10;
 		g.setColor(new Color(0,0,0,100));
-		g.fillRect(0, Game.pixel.height - 100, 150, 100);
+		g.fillRect(0, Game.HEIGHT - 100, 150, 100);
 		
 		
 		for (int f : Game.lastFrames) {
@@ -108,7 +108,7 @@ public class GameInfo {
 			nx += 7;
 			
 			g.setColor(color);
-			g.fillRect(nx, Game.pixel.height-f*2, 6, f*2);
+			g.fillRect(nx, Game.HEIGHT-f*2, 6, f*2);
 		}
 
 	}

@@ -105,7 +105,7 @@ public class Sky {
 
 	public void render(Graphics gr) {
 		gr.setColor(new Color(r, g, b));
-		gr.fillRect(0, 0, Game.pixel.width, Game.pixel.height);
+		gr.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 	}
 	
 	public  String getDayTimeName(){

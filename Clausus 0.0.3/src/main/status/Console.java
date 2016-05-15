@@ -23,7 +23,7 @@ public class Console {
 	private String inputCommand = "";
 	private String inputValue = "";
 
-	private String pattern = "[a-zA-Z0-9\\s]*";
+	private String pattern = "[a-zA-Z0-9\\s_.]*";
 
 	private int height = 200;
 	private int width = Game.WIDTH;
@@ -54,6 +54,8 @@ public class Console {
 		temp.setNoValue(true);
 		commandList.add(temp);
 		
+		temp = new Command("preLoadedChunks", Action.maxChunks);
+		commandList.add(temp);
 		
 		commandList.add(new Command("client", Action.clientStart));
 

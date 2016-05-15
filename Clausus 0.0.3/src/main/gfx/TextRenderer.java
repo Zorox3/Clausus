@@ -16,7 +16,7 @@ public class TextRenderer {
 	public static void writeTextBG(Graphics g, String text, Color color, int x,
 			int y, Color bgColor) {
 		g.setColor(bgColor);
-		g.fillRect(0, 0, Game.pixel.width, Game.pixel.height);
+		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
 		writeText(g, text, color, x, y);
 	}
@@ -33,7 +33,7 @@ public class TextRenderer {
 	public static void writeTextBGImageCentered(Graphics g, String text,
 			Color color, Color bgColor, BufferedImage image) {
 
-		g.drawImage(image, 0, 0, Game.pixel.width, Game.pixel.height, null);
+		g.drawImage(image, 0, 0, Game.WIDTH, Game.HEIGHT, null);
 		
 		writeText(g, text, color, Game.winCenterX - ((text.length() / 2) * 5),
 				Game.winCenterY - 3);

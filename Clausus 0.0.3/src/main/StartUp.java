@@ -95,12 +95,12 @@ public class StartUp implements Runnable {
 			int chunks = 0;
 			
 			
-			while(chunks < Game.level.maxChunks) {
+			do{
 				chunks = Game.level.generateChunk();
-				double prozent = Math.round((double)chunks/(double)Game.level.maxChunks * 100D);
+				double prozent = Math.round((double)chunks/(double)Level.maxChunks * 100D);
 				Game.messages.setCustomText("Loading...Welt wird berechnet "
 						+ prozent + "%");
-			}
+			}while(chunks < Level.maxChunks);
 
 
 					

@@ -1,10 +1,14 @@
 package main;
 
 import java.applet.Applet;
+import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.security.CodeSource;
 import java.util.ArrayList;
@@ -30,7 +34,7 @@ import main.status.Messages;
 import net.client.Client;
 import net.server.Server;
 
-public class Game extends Applet implements Runnable {
+public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,9 +47,8 @@ public class Game extends Applet implements Runnable {
 	// PUBLIC STATICS VARs
 	public static JFrame frame;
 	public static Dimension realSize;
-	public static Dimension size = new Dimension(800, 600);
+	public static Dimension size = new Dimension(1280, 720);
 	public static boolean isRunning = false;
-	public static Dimension pixel;
 	public static Level level;
 	public static Player player;
 	public static Inventory inventory;
@@ -99,12 +102,11 @@ public class Game extends Applet implements Runnable {
 	public static Random globalRandom;
 
 	// PRIVATE VARs
-	public static Image screen;
 	public static boolean vsync = true;
 
 	public static int debugRendering = 0;
 
-	public static Game game;
+	public static Game instance;
 
 	public static boolean shadowDebug = false;
 
@@ -119,29 +121,7 @@ public class Game extends Applet implements Runnable {
 	public static ClientPlayer clientPlayer;
 
 	public static void main(String args[]) {
-		game = new Game();
-
-		frame = new JFrame();
-		// frame.setUndecorated(true);
-		frame.setTitle(TITLE + " " + VERSION + ": Build: " + BUILD);
-		frame.add(game);
-		frame.pack();
-		realSize = new Dimension(frame.getWidth(), frame.getHeight());
-		// frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		// frame.setResizable(true);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-
-		pixel = new Dimension(frame.getWidth() / PIXEL_SIZE, frame.getHeight()
-				/ PIXEL_SIZE);
-		winCenterX = pixel.width / 2;
-		winCenterY = pixel.height / 2;
-
-		WIDTH = pixel.width;
-		HEIGHT = pixel.height;
-
-		game.start();
+		new Game();
 	}
 
 	public void setPath() {
@@ -169,17 +149,39 @@ public class Game extends Applet implements Runnable {
 	public Game() {
 		setPreferredSize(size);
 
+		frame = new JFrame();
+		// frame.setUndecorated(true);
+		frame.setTitle(TITLE + " " + VERSION + ": Build: " + BUILD);
+		frame.add(this);
+		frame.pack();
+		realSize = new Dimension(frame.getWidth(), frame.getHeight());
+		// frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		// frame.setResizable(true);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+		
+		
 		addKeyListener(new Listener());
 		addMouseListener(new Listener());
 		addMouseMotionListener(new Listener());
 		addMouseWheelListener(new Listener());
 		setPath();
 
+		winCenterX = getWidth() / 2;
+		winCenterY = getHeight() / 2;
+
+		WIDTH = getWidth();
+		HEIGHT = getHeight();
+		
 		cThread = new Thread(this, "Main Thread");
 
+		instance = this;
+		start();
+		
 	}
 
-	@Override
 	public void start() {
 		isRunning = true;
 
@@ -187,7 +189,6 @@ public class Game extends Applet implements Runnable {
 		System.out.println("Thread Main gestartet");
 	}
 
-	@Override
 	public void stop() {
 		isRunning = false;
 	}
@@ -195,10 +196,7 @@ public class Game extends Applet implements Runnable {
 	// ####################
 	// INIT
 	// ####################
-	@Override
 	public void init() {
-		screen = createVolatileImage(pixel.width, pixel.height);
-
 		gui = StaticMenues.mainMenu();
 		gui.setActive(true);
 		messages = new Messages();
@@ -219,7 +217,7 @@ public class Game extends Applet implements Runnable {
 	public void run() {
 		long lastTime = System.nanoTime();
 		double nsPerTick = 1000000000D / 60D;
-		double nsPerTickRender = 1000000000D / 30D;
+		double nsPerTickRender = 1000000000D / 60D;
 		long lastTimer = System.currentTimeMillis();
 		double delta = 0;
 		double deltaRender = 0;
@@ -382,7 +380,18 @@ public class Game extends Applet implements Runnable {
 	// GAME RENDER
 	// ##################
 	public void render() {
-		g = screen.getGraphics();
+		BufferStrategy bs = getBufferStrategy();
+
+		if (bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+
+		g = bs.getDrawGraphics();
+
+		Graphics2D g2 = (Graphics2D) g;
+		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHints(rh);
 
 		if (gameStart) {
 			sky.render(g);
@@ -420,11 +429,8 @@ public class Game extends Applet implements Runnable {
 		if (showConsole) {
 			Game.console.render(g);
 		}
-
-		g = getGraphics();
-		g.drawImage(screen, 0, 0, size.width, size.height, 0, 0, pixel.width,
-				pixel.height, null);
 		g.dispose();
+		bs.show();
 	}
 
 	public static void vSync(boolean toggle) {
